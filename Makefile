@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=main.c token.c utils.c
+SOURCES=main.c token.c utils.c lexer.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=descompiler
 

@@ -9,7 +9,7 @@ typedef struct Lexer {
   Token *tokens;
 } Lexer;
 
-Lexer* lexer_init(char* source_code);
-Token getNextToken(Lexer* lexer);
+Lexer lexer_init(char* source_code);
+Token* lexer_get_next_token(Lexer* lexer);
 
 #endif

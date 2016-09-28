@@ -3,14 +3,16 @@
 
 #include <string.h>
 
-typedef enum Type { Identifier, Number } Class;
+typedef enum TokenType { Identifier, Number } Class;
 
 typedef struct Token {
-  enum Type type;
-  char *ini;
-  char *end;
+  enum TokenType type;
+  int ini;
+  int end;
+  char* source_code;
 } Token;
 
-int tokenLength(Token *token);
+Token* token_init(enum TokenType type, int ini, int end, char* source_code);
+void token_print(Token* token);
 
 #endif
