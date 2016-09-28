@@ -16,3 +16,21 @@ unless(5 >= 10) {
 }
 
 var false = true;
+
+function add(a, b) {
+  return sqrt(a ** a, a) - b * (-1);
+}
+
+while (Q.length > 0) {
+    u = Q.splice(0, 1)[0];
+    for (i = 0; i < G.vertices[u].edges.length; i += 1) {
+        v = G.vertices[u].edges[i];
+        if (G.vertices[v].color === 'white') {
+            G.vertices[v].color = 'grey';
+            G.vertices[v].distance = G.vertices[u].distance + 1;
+            G.vertices[v].parent = u;
+            Q.push(v);
+        }
+    }
+    G.vertices[u].color = 'black';
+}
