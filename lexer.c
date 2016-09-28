@@ -26,7 +26,7 @@ void lexer_skip_white_spaces(Lexer* lexer) {
 }
 
 Token* lexer_extract_keyword_or_identifier(Lexer* lexer) {
-  Token* token;
+  Token* token = NULL;
   char c = lexer_peek_char(lexer);
 
   if(!isalpha(c)) {
@@ -47,14 +47,62 @@ Token* lexer_extract_keyword_or_identifier(Lexer* lexer) {
   return token;
 }
 
+Token* lexer_extract_operator(Lexer* lexer) {
+  Token* token = NULL;
+  int cursor_ini = lexer->cursor;
+  char c = lexer_next_char(lexer);
+
+  switch (c) {
+    case '=':
+      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = lexer_peek_char(lexer);
+      switch (c) {
+        case '=':
+          token->end++;
+          lexer_next_char(lexer);
+      }
+      break;
+    default:
+      lexer_prev_char(lexer);
+  }
+
+  return token;
+}
+
+Token* lexer_extract_string(Lexer* lexer) {
+  Token* token = NULL;
+  char string_start = lexer_peek_char(lexer);
+  char c = string_start;
+
+  if(c != '"' && c != '\'') {
+    return NULL;
+  }
+
+  token = token_init(String, lexer->cursor, -1, lexer->source_code);
+
+  c = lexer_next_char(lexer);
+  do {
+    c = lexer_next_char(lexer);
+  } while(c != string_start);
+
+  token->end = lexer->cursor - 1;
+
+  return token;
+}
+
 
 
 Token* lexer_get_next_token(Lexer* lexer) {
   Token* token = NULL;
 
   lexer_skip_white_spaces(lexer);
-
   if((token = lexer_extract_keyword_or_identifier(lexer))) {
+    return token;
+  }
+  if((token = lexer_extract_operator(lexer))) {
+    return token;
+  }
+  if((token = lexer_extract_string(lexer))) {
     return token;
   }
 

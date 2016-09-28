@@ -30,6 +30,12 @@ void token_print(Token* token) {
   else if(token->type == Keyword) {
     printf("Keyword: %s %d %d\n", token_value(token), token->ini, token->end);
   }
+  else if(token->type == Operator) {
+    printf("Operator: %s %d %d\n", token_value(token), token->ini, token->end);
+  }
+  else if(token->type == String) {
+    printf("String: %s %d %d\n", token_value(token), token->ini, token->end);
+  }
   else {
     printf("Error!\n");
   }

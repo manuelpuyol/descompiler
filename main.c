@@ -8,6 +8,8 @@ void eval(char* source_code) {
 
   token_print(lexer_get_next_token(&lexer));
   token_print(lexer_get_next_token(&lexer));
+  token_print(lexer_get_next_token(&lexer));
+  token_print(lexer_get_next_token(&lexer));
 
   printf("%d\n", lexer.cursor);
 }
