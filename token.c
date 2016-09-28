@@ -52,9 +52,9 @@ void token_print(Token* token) {
 
 int token_change_if_keyword(Token* token) {
   char keywords[][256] = {
-    "var", "int", "if", "else", "throw"
+    "var", "int", "if", "else", "throw", "true", "false", "unless"
   };
-  int keywords_length = 5;
+  int keywords_length = 8;
   char* value = token_value(token);
 
   for (size_t i = 0; i < keywords_length; i++) {

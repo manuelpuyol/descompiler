@@ -108,6 +108,33 @@ Token* lexer_extract_operator(Lexer* lexer) {
           lexer_next_char(lexer);
       }
       break;
+    case '*':
+      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = lexer_peek_char(lexer);
+      switch (c) {
+        case '*': case '=':
+          token->end++;
+          lexer_next_char(lexer);
+      }
+      break;
+    case '/':
+      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = lexer_peek_char(lexer);
+      switch (c) {
+        case '=':
+          token->end++;
+          lexer_next_char(lexer);
+      }
+      break;
+    case '>': case '<':
+      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = lexer_peek_char(lexer);
+      switch (c) {
+        case '=':
+          token->end++;
+          lexer_next_char(lexer);
+      }
+      break;
     case '.':
       return token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
     default:
