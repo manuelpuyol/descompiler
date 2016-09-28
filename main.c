@@ -5,13 +5,13 @@
 
 void eval(char* source_code) {
   Lexer lexer = lexer_init(source_code);
+  Token* token;
 
-  token_print(lexer_get_next_token(&lexer));
-  token_print(lexer_get_next_token(&lexer));
-  token_print(lexer_get_next_token(&lexer));
-  token_print(lexer_get_next_token(&lexer));
-
-  printf("%d\n", lexer.cursor);
+  do {
+    token = lexer_get_next_token(&lexer);
+    token_print(token);
+  } while(token->type != Eof);
+  
 }
 
 int main(int argc, char const *argv[]) {

@@ -3,7 +3,7 @@
 
 #include <string.h>
 
-typedef enum TokenType { Identifier, Keyword, Operator, String } Class;
+typedef enum TokenType { Identifier, Keyword, Operator, String, Delimiter, Eof } Class;
 
 typedef struct Token {
   enum TokenType type;

@@ -69,6 +69,33 @@ Token* lexer_extract_operator(Lexer* lexer) {
   return token;
 }
 
+Token* lexer_extract_delimiter(Lexer* lexer) {
+  Token* token = NULL;
+  int cursor_ini = lexer->cursor;
+  char c = lexer_next_char(lexer);
+
+  switch (c) {
+    case ';':
+      return token_init(Delimiter, cursor_ini, cursor_ini, lexer->source_code);
+    default:
+      lexer_prev_char(lexer);
+  }
+
+  return token;
+}
+
+Token* lexer_extract_eof(Lexer* lexer) {
+  int cursor_ini = lexer->cursor;
+  char c = lexer_next_char(lexer);
+
+  if(c == '\0') {
+    return token_init(Eof, cursor_ini, cursor_ini, lexer->source_code);
+  }
+
+  lexer_prev_char(lexer);
+  return NULL;
+}
+
 Token* lexer_extract_string(Lexer* lexer) {
   Token* token = NULL;
   char string_start = lexer_peek_char(lexer);
@@ -90,12 +117,14 @@ Token* lexer_extract_string(Lexer* lexer) {
   return token;
 }
 
-
-
 Token* lexer_get_next_token(Lexer* lexer) {
   Token* token = NULL;
 
   lexer_skip_white_spaces(lexer);
+
+  if((token = lexer_extract_eof(lexer))) {
+    return token;
+  }
   if((token = lexer_extract_keyword_or_identifier(lexer))) {
     return token;
   }
@@ -103,6 +132,9 @@ Token* lexer_get_next_token(Lexer* lexer) {
     return token;
   }
   if((token = lexer_extract_string(lexer))) {
+    return token;
+  }
+  if((token = lexer_extract_delimiter(lexer))) {
     return token;
   }
 
