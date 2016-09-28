@@ -47,6 +47,34 @@ Token* lexer_extract_keyword_or_identifier(Lexer* lexer) {
   return token;
 }
 
+Token* lexer_extract_number(Lexer* lexer) {
+  Token* token = NULL;
+  char c = lexer_peek_char(lexer);
+
+  if(!isdigit(c)) {
+    return NULL;
+  }
+
+  token = token_init(Number, lexer->cursor, -1, lexer->source_code);
+
+  do {
+    c = lexer_next_char(lexer);
+  } while(isdigit(c));
+
+  if(c == '.') {
+    do {
+      c = lexer_next_char(lexer);
+    } while(isdigit(c));
+  }
+
+  lexer_prev_char(lexer);
+  token->end = lexer->cursor - 1;
+
+  token_change_if_keyword(token);
+
+  return token;
+}
+
 Token* lexer_extract_operator(Lexer* lexer) {
   Token* token = NULL;
   int cursor_ini = lexer->cursor;
@@ -67,6 +95,15 @@ Token* lexer_extract_operator(Lexer* lexer) {
       c = lexer_peek_char(lexer);
       switch (c) {
         case '+': case '=':
+          token->end++;
+          lexer_next_char(lexer);
+      }
+      break;
+    case '-':
+      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = lexer_peek_char(lexer);
+      switch (c) {
+        case '-': case '=':
           token->end++;
           lexer_next_char(lexer);
       }
@@ -137,6 +174,9 @@ Token* lexer_get_next_token(Lexer* lexer) {
     return token;
   }
   if((token = lexer_extract_keyword_or_identifier(lexer))) {
+    return token;
+  }
+  if((token = lexer_extract_number(lexer))) {
     return token;
   }
   if((token = lexer_extract_operator(lexer))) {

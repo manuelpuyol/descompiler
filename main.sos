@@ -1,8 +1,12 @@
 var javascript = "isAwesome";
+var happiness = 0;
+var PI = 3.1415;
 
 if(javascript == 'isAwesome') {
+  ++happiness;
   console.log("YAHOOO" + "!!!");
 }
 else {
+  --happiness;
   throw "Error!";
 }

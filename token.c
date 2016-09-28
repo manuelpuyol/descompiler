@@ -42,6 +42,9 @@ void token_print(Token* token) {
   else if(token->type == Eof) {
     printf("EOF: %s %d %d\n", token_value(token), token->ini, token->end);
   }
+  else if(token->type == Number) {
+    printf("Number: %s %d %d\n", token_value(token), token->ini, token->end);
+  }
   else {
     printf("Error!\n");
   }
