@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "utils.h"
 #include "lexer.h"
 
@@ -9,9 +10,15 @@ void eval(char* source_code) {
 
   do {
     token = lexer_get_next_token(&lexer);
-    token_print(token);
+    if(token != NULL) {
+      token_print(token);
+    }
+    else {
+      printf("Error na posição %d do arquivo!\n", lexer.cursor);
+      exit(-1);
+    }
   } while(token->type != Eof);
-  
+
 }
 
 int main(int argc, char const *argv[]) {

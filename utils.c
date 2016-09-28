@@ -1,9 +1,5 @@
-#include <assert.h>
-#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <string.h>
 #include "utils.h"
 
 size_t file_size(FILE *file) {
