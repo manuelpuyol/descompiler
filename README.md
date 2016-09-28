@@ -1,7 +1,7 @@
 # descompiler
 
 ## compile
-```make```
+   ` make `
 
 ## run
-```./descompiler main.sos```
+   `./descompiler main.sos`
