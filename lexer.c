@@ -25,7 +25,7 @@ void lexer_skip_white_spaces(Lexer* lexer) {
   lexer_prev_char(lexer);
 }
 
-Token* lexer_extract_identifier(Lexer* lexer) {
+Token* lexer_extract_keyword_or_identifier(Lexer* lexer) {
   Token* token;
   char c = lexer_peek_char(lexer);
 
@@ -39,17 +39,22 @@ Token* lexer_extract_identifier(Lexer* lexer) {
     c = lexer_next_char(lexer);
   } while(isalpha(c) || isdigit(c));
 
+  lexer_prev_char(lexer);
   token->end = lexer->cursor - 1;
+
+  token_change_if_keyword(token);
 
   return token;
 }
+
+
 
 Token* lexer_get_next_token(Lexer* lexer) {
   Token* token = NULL;
 
   lexer_skip_white_spaces(lexer);
 
-  if((token = lexer_extract_identifier(lexer))) {
+  if((token = lexer_extract_keyword_or_identifier(lexer))) {
     return token;
   }
 

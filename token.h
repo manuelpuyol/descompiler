@@ -3,7 +3,7 @@
 
 #include <string.h>
 
-typedef enum TokenType { Identifier, Number } Class;
+typedef enum TokenType { Identifier, Keyword, Number } Class;
 
 typedef struct Token {
   enum TokenType type;
@@ -14,5 +14,6 @@ typedef struct Token {
 
 Token* token_init(enum TokenType type, int ini, int end, char* source_code);
 void token_print(Token* token);
+int token_change_if_keyword(Token* token);
 
 #endif

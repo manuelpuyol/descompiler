@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "token.h"
 
 #define token_size(token) (token->end - token->ini + 1)
@@ -22,12 +23,31 @@ char* token_value(Token* token) {
   return value;
 }
 
-
 void token_print(Token* token) {
   if(token->type == Identifier) {
-    printf("Identifier: %s %d %d\n", token->ini, token->end, token_value(token));
+    printf("Identifier: %s %d %d\n", token_value(token), token->ini, token->end);
+  }
+  else if(token->type == Keyword) {
+    printf("Keyword: %s %d %d\n", token_value(token), token->ini, token->end);
   }
   else {
     printf("Error!\n");
   }
+}
+
+int token_change_if_keyword(Token* token) {
+  char keywords[][256] = {
+    "var", "int"
+  };
+  int keywords_length = 2;
+  char* value = token_value(token);
+
+  for (size_t i = 0; i < keywords_length; i++) {
+    if(strcmp(keywords[i], value) == 0) {
+      token->type = Keyword;
+      return 1;
+    }
+  }
+
+  return 0;
 }
