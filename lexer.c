@@ -218,3 +218,29 @@ Token* lexer_get_next_token(Lexer* lexer) {
 
   return token;
 }
+
+Token* lexer_get_all_tokens(Lexer* lexer) {
+  Token *current_token, *prev_token, *first_token;
+
+  do {
+    current_token = lexer_get_next_token(lexer);
+    if(current_token != NULL) {
+      token_print(current_token);
+
+      if(first_token == NULL) {
+        first_token = current_token;
+      }
+
+      if(prev_token != NULL) {
+        current_token->prev = prev_token;
+        prev_token->next = current_token;
+      }
+      prev_token = current_token;
+    }
+    else {
+      return NULL;
+    }
+  } while(current_token->type != Eof);
+
+  return first_token;
+}

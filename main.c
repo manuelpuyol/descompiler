@@ -8,16 +8,12 @@ void eval(char* source_code) {
   Lexer lexer = lexer_init(source_code);
   Token* token;
 
-  do {
-    token = lexer_get_next_token(&lexer);
-    if(token != NULL) {
-      token_print(token);
-    }
-    else {
-      printf("Error na posição %d do arquivo!\n", lexer.cursor);
-      exit(-1);
-    }
-  } while(token->type != Eof);
+  token = lexer_get_all_tokens(&lexer);
+
+  if(token == NULL) {
+    printf("Error na posição %d do arquivo!\n", lexer.cursor);
+    exit(-1);
+  }
 
 }
 

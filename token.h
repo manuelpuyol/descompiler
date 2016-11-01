@@ -10,6 +10,8 @@ typedef struct Token {
   int ini;
   int end;
   char* source_code;
+  struct Token* next;
+  struct Token* prev;
 } Token;
 
 Token* token_init(enum TokenType type, int ini, int end, char* source_code);
