@@ -220,7 +220,7 @@ Token* lexer_get_next_token(Lexer* lexer) {
 }
 
 Token* lexer_get_all_tokens(Lexer* lexer) {
-  Token *current_token, *prev_token, *first_token;
+  Token *current_token = NULL, *prev_token = NULL, *first_token = NULL;
 
   do {
     current_token = lexer_get_next_token(lexer);
