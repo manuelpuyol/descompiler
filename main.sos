@@ -1,36 +1,30 @@
-var javascript = "isAwesome";
-var happiness = 0;
-var PI = 3.1415;
-
-if(javascript == 'isAwesome') {
-  ++happiness;
-  console.log("YAHOOO" + "!!!");
+types {
+  int as inteiro;
 }
-else {
-  --happiness;
-  throw "Error!";
+functions {
+  int main(int a, int b);
+  int sum(int a, int b);
+}
+data {
+  inteiro globalVar;
 }
 
-unless(5 >= 10) {
-  console.log(2**10);
+int sum(int a, int b) {
+  data {
+    int c;
+  }
+
+  c = a + b;
+  return c;
 }
 
-var false = true;
+int main(int a, int b) {
+  data {
+    int result;
+  }
 
-function add(a, b) {
-  return sqrt(a ** a, a) - b * (-1);
-}
+  result = sum(a, b);
+  printf(result);
 
-while (Q.length > 0) {
-    u = Q.splice(0, 1)[0];
-    for (i = 0; i < G.vertices[u].edges.length; i += 1) {
-        v = G.vertices[u].edges[i];
-        if (G.vertices[v].color === 'white') {
-            G.vertices[v].color = 'grey';
-            G.vertices[v].distance = G.vertices[u].distance + 1;
-            G.vertices[v].parent = u;
-            Q.push(v);
-        }
-    }
-    G.vertices[u].color = 'black';
+  return 0;
 }
