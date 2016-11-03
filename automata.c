@@ -100,16 +100,21 @@ Token* automata_apply(Automata* automata, Token* token, int spaces) {
 
       if(automata_transition == NULL) {
         printf("%sEsse cara não tem nenhum automata!!!\n", string_spaces(spaces));
+        getchar();
+        getchar();
+        getchar();
+        getchar();
       }
 
       while(automata_transition != NULL) {
         next_token = automata_apply(automata_transition->automata, current_token, spaces + 1);
         if(next_token != NULL) {
-          printf("%sVoltou com um next_token: %s!!!\n", string_spaces(spaces), token_value(next_token));
+          printf("%s %s Voltou com um next_token: %s!!!\n", string_spaces(spaces), automata->name, token_value(next_token));
           current_token = next_token;
           current_state = automata_transition->next_state;
           break;
         }
+        automata_transition = automata_transition->next;
       }
       if(next_token == NULL) {
         printf("%sSaiu do loop sem next_token!!!\n", string_spaces(spaces));

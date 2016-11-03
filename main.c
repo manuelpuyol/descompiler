@@ -26,6 +26,13 @@
   return 0; \
 }
 
+int identifier_check(Token* token) {
+  if(token->type == Identifier) {
+    token_print(token);
+    return 1;
+  }
+  return 0;
+}
 
 #define AUTOMATA_TRANSITION_INIT(name) Automata* name ## _automata = automata_transition_init(&name, #name)
 
@@ -41,27 +48,6 @@ AUTOMATA_DELIMITER(close_braces, });
 AUTOMATA_DELIMITER(semicolon, ;);
 
 Automata* create_program_automata() {
-  Automata* program_automata = automata_init(5, "program"); //OK
-  Automata* tipos_automata = automata_init(5, "tipos"); //OK
-  Automata* assinaturas_automata = automata_init(5, "assinaturas");
-  Automata* dados_automata = automata_init(5, "dados");
-  Automata* funcoes_automata = automata_init(3, "funcoes");
-  Automata* tipo_automata = automata_init(2, "tipo"); //OK
-  Automata* renomear_automata = automata_init(5, "renomear"); //OK
-  Automata* estrutura_automata = automata_init(2, "estrutura");
-  Automata* nome_automata = automata_init(2, "nome");
-  Automata* tipo_base_automata = automata_init(2, "tipo_base"); //OK
-
-  // Automata* keyword_types_check_automata = automata_transition_init(&keyword_types_check, "keyword_types_check");
-  // Automata* keyword_as_check_automata = automata_transition_init(&keyword_as_check, "keyword_as_check");
-  // Automata* keyword_char_check_automata = automata_transition_init(&keyword_char_check, "keyword_char_check");
-  // Automata* keyword_bool_check_automata = automata_transition_init(&keyword_bool_check, "keyword_bool_check");
-  // Automata* keyword_float_check_automata = automata_transition_init(&keyword_float_check, "keyword_float_check");
-  // Automata* keyword_int_check_automata = automata_transition_init(&keyword_int_check, "keyword_int_check");
-  // Automata* delimiter_open_braces_check_automata = automata_transition_init(&delimiter_open_braces_check, "delimiter_open_braces_check");
-  // Automata* delimiter_close_braces_check_automata = automata_transition_init(&delimiter_close_braces_check, "delimiter_close_braces_check");
-  // Automata* delimiter_semicolon_check_automata = automata_transition_init(&delimiter_semicolon_check, "delimiter_semicolon_check");
-
   AUTOMATA_TRANSITION_INIT(keyword_types_check);
   AUTOMATA_TRANSITION_INIT(keyword_as_check);
   AUTOMATA_TRANSITION_INIT(keyword_char_check);
@@ -71,6 +57,18 @@ Automata* create_program_automata() {
   AUTOMATA_TRANSITION_INIT(delimiter_open_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_close_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_semicolon_check);
+  AUTOMATA_TRANSITION_INIT(identifier_check);
+
+  Automata* program_automata = automata_init(5, "program"); //OK
+  Automata* tipos_automata = automata_init(5, "tipos"); //OK
+  Automata* assinaturas_automata = automata_init(5, "assinaturas");
+  Automata* dados_automata = automata_init(5, "dados");
+  Automata* funcoes_automata = automata_init(3, "funcoes");
+  Automata* tipo_automata = automata_init(2, "tipo"); //OK
+  Automata* renomear_automata = automata_init(5, "renomear"); //OK
+  Automata* estrutura_automata = automata_init(2, "estrutura");
+  Automata* nome_automata = identifier_check_automata; //OK
+  Automata* tipo_base_automata = automata_init(2, "tipo_base"); //OK
 
   //PROGRAM AUTOMATA
   automata_set_final_state(program_automata, 1);
