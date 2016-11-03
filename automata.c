@@ -76,9 +76,9 @@ Token* automata_apply(Automata* automata, Token* token, int spaces) {
   int current_state = 0;
   Token* current_token = token;
   Token* next_token = NULL;
+  getchar();
   printf("\n\n\n%sName: %s\n", string_spaces(spaces), automata->name);
   token_print(token);
-  getchar();
 
   // while(next_token = automata_apply())
   if(automata->checker != NULL) {
@@ -105,15 +105,22 @@ Token* automata_apply(Automata* automata, Token* token, int spaces) {
       while(automata_transition != NULL) {
         next_token = automata_apply(automata_transition->automata, current_token, spaces + 1);
         if(next_token != NULL) {
+          printf("%sVoltou com um next_token: %s!!!\n", string_spaces(spaces), token_value(next_token));
           current_token = next_token;
           current_state = automata_transition->next_state;
           break;
         }
       }
       if(next_token == NULL) {
+        printf("%sSaiu do loop sem next_token!!!\n", string_spaces(spaces));
         return NULL;
       }
+      else {
+        printf("%sSaiu do loop com next_token State: %d %d!!!\n", string_spaces(spaces), current_state, automata->final_states[current_state]);
+      }
     }
+    printf("%sSaiu do loop principal!!! %s\n", string_spaces(spaces), token_value(current_token));
+    return current_token;
   }
 
   return NULL;
