@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include "utils.h"
 #include "lexer.h"
+#include "token.h"
 #include "automata.h"
 
 #define FOO(name) AUTOMATA_KEYWORK(name)
 #define AUTOMATA_KEYWORK(name) int keyword_##name ## _check(Token* token) { \
-  if(token->type == Keyword) { \
+  if(token->type == Keyword && !strcmp(token_value(token), #name)) { \
     token_print(token); \
     return 1; \
   } \
@@ -15,8 +17,8 @@
   return 0; \
 }
 
-#define AUTOMATA_DELIMITER(name) int delimiter_##name ## _check(Token* token) { \
-  if(token->type == Delimiter) { \
+#define AUTOMATA_DELIMITER(name, symb) int delimiter_##name ## _check(Token* token) { \
+  if(token->type == Delimiter && !strcmp(token_value(token), #symb)) { \
     token_print(token); \
     return 1; \
   } \
@@ -34,9 +36,9 @@ AUTOMATA_KEYWORK(float);
 AUTOMATA_KEYWORK(int);
 AUTOMATA_KEYWORK(as);
 
-AUTOMATA_DELIMITER(open_braces);
-AUTOMATA_DELIMITER(close_braces);
-AUTOMATA_DELIMITER(semicolon);
+AUTOMATA_DELIMITER(open_braces, {);
+AUTOMATA_DELIMITER(close_braces, });
+AUTOMATA_DELIMITER(semicolon, ;);
 
 Automata* create_program_automata() {
   Automata* program_automata = automata_init(5, "program"); //OK

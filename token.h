@@ -17,5 +17,6 @@ typedef struct Token {
 Token* token_init(enum TokenType type, int ini, int end, char* source_code);
 void token_print(Token* token);
 int token_change_if_keyword(Token* token);
+char* token_value(Token* token);
 
 #endif
