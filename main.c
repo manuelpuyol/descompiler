@@ -25,6 +25,15 @@
   return 0; \
 }
 
+#define AUTOMATA_OPERATOR(name, symb) int operator_##name ## _check(Token* token) { \
+  if(token->type == Operator && !strcmp(token_value(token), symb)) { \
+    token_print(token); \
+    return 1; \
+  } \
+\
+  return 0; \
+}
+
 int identifier_check(Token* token) {
   if(token->type == Identifier) {
     token_print(token);
@@ -54,6 +63,8 @@ AUTOMATA_DELIMITER(close_brackets, "]");
 AUTOMATA_DELIMITER(semicolon, ";");
 AUTOMATA_DELIMITER(comma, ",");
 
+AUTOMATA_OPERATOR(equal, "=");
+
 Automata* create_program_automata() {
   AUTOMATA_TRANSITION_INIT(keyword_types_check);
   AUTOMATA_TRANSITION_INIT(keyword_as_check);
@@ -72,6 +83,7 @@ Automata* create_program_automata() {
   AUTOMATA_TRANSITION_INIT(delimiter_close_brackets_check);
   AUTOMATA_TRANSITION_INIT(delimiter_semicolon_check);
   AUTOMATA_TRANSITION_INIT(delimiter_comma_check);
+  AUTOMATA_TRANSITION_INIT(operator_equal_check);
   AUTOMATA_TRANSITION_INIT(identifier_check);
 
   Automata* program_automata = automata_init(5, "program"); //OK
@@ -101,6 +113,8 @@ Automata* create_program_automata() {
   Automata* while_automata = automata_init(5, "while");
   Automata* ifelse_automata = automata_init(5, "ifelse");
   Automata* if_automata = automata_init(5, "if");
+  Automata* caractere_automata = automata_init(5, "caractere");
+  Automata* expressao_automata = automata_init(5, "expressao");
 
   //PROGRAM AUTOMATA
   automata_set_final_state(program_automata, 1);
@@ -239,6 +253,14 @@ Automata* create_program_automata() {
   automata_add_transition(comando_automata, 0, 1, ifelse_automata);
   automata_add_transition(comando_automata, 0, 1, if_automata);
   automata_add_transition(comando_automata, 0, 1, atribuicao_automata);
+
+  //ATRIBUICAO AUTOMATA
+  automata_set_final_state(atribuicao_automata, 4);
+  automata_add_transition(atribuicao_automata, 3, 4, delimiter_semicolon_check_automata);
+  automata_add_transition(atribuicao_automata, 2, 3, caractere_automata);
+  automata_add_transition(atribuicao_automata, 2, 3, expressao_automata);
+  automata_add_transition(atribuicao_automata, 1, 2, operator_equal_check_automata);
+  automata_add_transition(atribuicao_automata, 0, 1, nome_automata);
 
   return program_automata;
 }

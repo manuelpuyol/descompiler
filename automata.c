@@ -76,7 +76,7 @@ Token* automata_apply(Automata* automata, Token* token, int spaces) {
   int current_state = 0;
   Token* current_token = token;
   Token* next_token = NULL;
-  getchar();
+  // getchar();
   printf("\n\n\n%sName: %s\n", string_spaces(spaces), automata->name);
   token_print(token);
 
