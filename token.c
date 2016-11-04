@@ -54,9 +54,9 @@ int token_change_if_keyword(Token* token) {
   char keywords[][256] = {
     "var", "if", "else", "throw", "true", "false", "unless", "function", "while",
     "for", //10
-    "types", "as", "int", "char", "bool", "float", "struct", "data", "functions", "return"
+    "types", "as", "int", "char", "bool", "float", "struct", "data", "functions", "return", "main"
   };
-  int keywords_length = 20;
+  int keywords_length = 21;
   char* value = token_value(token);
 
   for (size_t i = 0; i < keywords_length; i++) {

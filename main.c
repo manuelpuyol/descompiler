@@ -54,6 +54,7 @@ AUTOMATA_KEYWORK(struct);
 AUTOMATA_KEYWORK(data);
 AUTOMATA_KEYWORK(functions);
 AUTOMATA_KEYWORK(return);
+AUTOMATA_KEYWORK(main);
 
 AUTOMATA_DELIMITER(open_braces, "{");
 AUTOMATA_DELIMITER(close_braces, "}");
@@ -83,6 +84,7 @@ Automata* create_program_automata() {
   AUTOMATA_TRANSITION_INIT(keyword_data_check);
   AUTOMATA_TRANSITION_INIT(keyword_functions_check);
   AUTOMATA_TRANSITION_INIT(keyword_return_check);
+  AUTOMATA_TRANSITION_INIT(keyword_main_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_close_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_parenthesis_check);
@@ -125,7 +127,8 @@ Automata* create_program_automata() {
   Automata* fator_arit_automata = automata_init(5, "fator_arit"); //OK
   Automata* variavel_automata = automata_init(6, "variavel"); //OK
   Automata* retorno_automata = automata_init(4, "retorno"); //OK
-  Automata* main_automata = automata_init(5, "main");
+  Automata* main_automata = automata_init(9, "main"); //OK
+  Automata* chamada_automata = automata_init(5, "chamada");
   Automata* inteiro_automata = automata_init(5, "inteiro");
   Automata* impressao_automata = automata_init(5, "impressao");
   Automata* leitura_automata = automata_init(5, "leitura");
@@ -135,7 +138,6 @@ Automata* create_program_automata() {
   Automata* caractere_automata = automata_init(5, "caractere");
   Automata* booleana_automata = automata_init(5, "booleana");
   Automata* numero_automata = automata_init(5, "numero");
-  Automata* chamada_automata = automata_init(5, "chamada");
 
   //PROGRAM AUTOMATA
   automata_set_final_state(program_automata, 1);
@@ -328,6 +330,17 @@ Automata* create_program_automata() {
   automata_add_transition(retorno_automata, 2, 3, delimiter_semicolon_check_automata);
   automata_add_transition(retorno_automata, 1, 2, expressao_automata);
   automata_add_transition(retorno_automata, 0, 1, keyword_return_check_automata);
+
+  //MAIN AUTOMATA
+  automata_set_final_state(main_automata, 8);
+  automata_add_transition(main_automata, 7, 8, delimiter_close_braces_check_automata);
+  automata_add_transition(main_automata, 6, 7, comandos_funcao_automata);
+  automata_add_transition(main_automata, 5, 6, dados_automata);
+  automata_add_transition(main_automata, 4, 5, delimiter_open_braces_check_automata);
+  automata_add_transition(main_automata, 3, 4, delimiter_close_parenthesis_check_automata);
+  automata_add_transition(main_automata, 2, 3, delimiter_open_parenthesis_check_automata);
+  automata_add_transition(main_automata, 1, 2, keyword_main_check_automata);
+  automata_add_transition(main_automata, 0, 1, keyword_int_check_automata);
 
   return program_automata;
 }

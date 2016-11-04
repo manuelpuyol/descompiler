@@ -2,7 +2,6 @@ types {
   int as inteiro;
 }
 functions {
-  int main(int a, int b);
   int sum(int a, int b);
 }
 data {
@@ -18,7 +17,7 @@ int sum(int a, int b) {
   return c;
 }
 
-int main(int a, int b) {
+int main() {
   data {
     int result;
   }
