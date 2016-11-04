@@ -42,6 +42,7 @@ AUTOMATA_KEYWORK(float);
 AUTOMATA_KEYWORK(int);
 AUTOMATA_KEYWORK(as);
 AUTOMATA_KEYWORK(struct);
+AUTOMATA_KEYWORK(data);
 
 AUTOMATA_DELIMITER(open_braces, "{");
 AUTOMATA_DELIMITER(close_braces, "}");
@@ -58,6 +59,7 @@ Automata* create_program_automata() {
   AUTOMATA_TRANSITION_INIT(keyword_float_check);
   AUTOMATA_TRANSITION_INIT(keyword_int_check);
   AUTOMATA_TRANSITION_INIT(keyword_struct_check);
+  AUTOMATA_TRANSITION_INIT(keyword_data_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_close_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_parenthesis_check);
@@ -76,9 +78,9 @@ Automata* create_program_automata() {
   Automata* funcoes_automata = automata_init(3, "funcoes"); //OK
   Automata* implementacao_automata = automata_init(10, "implementacao"); //OK
   Automata* tipo_nome_automata = automata_init(2, "tipo_nome"); //OK
+  Automata* dados_automata = automata_init(5, "dados"); //OK
   Automata* declaracao_automata = automata_init(2, "declaracao");
   Automata* assinaturas_automata = automata_init(5, "assinaturas");
-  Automata* dados_automata = automata_init(5, "dados");
   Automata* main_automata = automata_init(5, "main");
   Automata* comandos_funcao_automata = automata_init(5, "comandos_funcao");
   Automata* parametro_automata = automata_init(5, "parametro");
@@ -156,10 +158,18 @@ Automata* create_program_automata() {
   automata_add_transition(implementacao_automata, 1, 2, nome_automata);
   automata_add_transition(implementacao_automata, 0, 1, tipo_nome_automata);
 
-  //TIPO_NOME
+  //TIPO_NOME AUTOMATA
   automata_set_final_state(tipo_nome_automata, 1);
   automata_add_transition(tipo_nome_automata, 0, 1, nome_automata);
   automata_add_transition(tipo_nome_automata, 0, 1, tipo_base_automata);
+
+  //DADOS AUTOMATA
+  automata_set_final_state(dados_automata, 4);
+  automata_add_transition(dados_automata, 3, 4, delimiter_close_braces_check_automata);
+  automata_add_transition(dados_automata, 3, 3, declaracao_automata);
+  automata_add_transition(dados_automata, 2, 3, declaracao_automata);
+  automata_add_transition(dados_automata, 1, 2, delimiter_open_braces_check_automata);
+  automata_add_transition(dados_automata, 0, 1, keyword_data_check_automata);
 
   return program_automata;
 }
