@@ -53,6 +53,7 @@ AUTOMATA_KEYWORK(as);
 AUTOMATA_KEYWORK(struct);
 AUTOMATA_KEYWORK(data);
 AUTOMATA_KEYWORK(functions);
+AUTOMATA_KEYWORK(return);
 
 AUTOMATA_DELIMITER(open_braces, "{");
 AUTOMATA_DELIMITER(close_braces, "}");
@@ -81,6 +82,7 @@ Automata* create_program_automata() {
   AUTOMATA_TRANSITION_INIT(keyword_struct_check);
   AUTOMATA_TRANSITION_INIT(keyword_data_check);
   AUTOMATA_TRANSITION_INIT(keyword_functions_check);
+  AUTOMATA_TRANSITION_INIT(keyword_return_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_close_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_parenthesis_check);
@@ -122,9 +124,9 @@ Automata* create_program_automata() {
   Automata* termo_arita_automata = automata_init(2, "termo_arita"); //OK
   Automata* fator_arit_automata = automata_init(5, "fator_arit"); //OK
   Automata* variavel_automata = automata_init(6, "variavel"); //OK
+  Automata* retorno_automata = automata_init(4, "retorno"); //OK
   Automata* main_automata = automata_init(5, "main");
   Automata* inteiro_automata = automata_init(5, "inteiro");
-  Automata* retorno_automata = automata_init(5, "retorno");
   Automata* impressao_automata = automata_init(5, "impressao");
   Automata* leitura_automata = automata_init(5, "leitura");
   Automata* while_automata = automata_init(5, "while");
@@ -320,6 +322,12 @@ Automata* create_program_automata() {
   automata_add_transition(variavel_automata, 1, 3, operator_dot_check_automata);
   automata_add_transition(variavel_automata, 1, 2, delimiter_open_brackets_check_automata);
   automata_add_transition(variavel_automata, 0, 1, nome_automata);
+
+  //RETORNO AUTOMATA
+  automata_set_final_state(retorno_automata, 3);
+  automata_add_transition(retorno_automata, 2, 3, delimiter_semicolon_check_automata);
+  automata_add_transition(retorno_automata, 1, 2, expressao_automata);
+  automata_add_transition(retorno_automata, 0, 1, keyword_return_check_automata);
 
   return program_automata;
 }
