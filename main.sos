@@ -23,7 +23,7 @@ int main() {
   }
 
   result = sum(a, b);
-  printf(result);
+  printeln(result)
 
   return 0;
 }

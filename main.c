@@ -42,6 +42,14 @@ int identifier_check(Token* token) {
   return 0;
 }
 
+int number_check(Token* token) {
+  if(token->type == Number) {
+    token_print(token);
+    return 1;
+  }
+  return 0;
+}
+
 #define AUTOMATA_TRANSITION_INIT(name) Automata* name ## _automata = automata_transition_init(&name, #name)
 
 AUTOMATA_KEYWORK(types);
@@ -55,6 +63,10 @@ AUTOMATA_KEYWORK(data);
 AUTOMATA_KEYWORK(functions);
 AUTOMATA_KEYWORK(return);
 AUTOMATA_KEYWORK(main);
+AUTOMATA_KEYWORK(printe);
+AUTOMATA_KEYWORK(printeln);
+AUTOMATA_KEYWORK(prints);
+AUTOMATA_KEYWORK(printsln);
 
 AUTOMATA_DELIMITER(open_braces, "{");
 AUTOMATA_DELIMITER(close_braces, "}");
@@ -85,6 +97,10 @@ Automata* create_program_automata() {
   AUTOMATA_TRANSITION_INIT(keyword_functions_check);
   AUTOMATA_TRANSITION_INIT(keyword_return_check);
   AUTOMATA_TRANSITION_INIT(keyword_main_check);
+  AUTOMATA_TRANSITION_INIT(keyword_printe_check);
+  AUTOMATA_TRANSITION_INIT(keyword_printeln_check);
+  AUTOMATA_TRANSITION_INIT(keyword_prints_check);
+  AUTOMATA_TRANSITION_INIT(keyword_printsln_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_close_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_parenthesis_check);
@@ -101,6 +117,7 @@ Automata* create_program_automata() {
   AUTOMATA_TRANSITION_INIT(operator_mult_check);
   AUTOMATA_TRANSITION_INIT(operator_dot_check);
   AUTOMATA_TRANSITION_INIT(identifier_check);
+  AUTOMATA_TRANSITION_INIT(number_check);
 
   Automata* program_automata = automata_init(5, "program"); //OK
   Automata* tipos_automata = automata_init(5, "tipos"); //OK
@@ -108,6 +125,7 @@ Automata* create_program_automata() {
   Automata* renomear_automata = automata_init(5, "renomear"); //OK
   Automata* estrutura_automata = automata_init(7, "estrutura"); //OK
   Automata* nome_automata = identifier_check_automata; //OK
+  Automata* numero_automata = number_check_automata; //OK
   Automata* tipo_base_automata = automata_init(2, "tipo_base"); //OK
   Automata* funcoes_automata = automata_init(3, "funcoes"); //OK
   Automata* implementacao_automata = automata_init(10, "implementacao"); //OK
@@ -129,16 +147,17 @@ Automata* create_program_automata() {
   Automata* retorno_automata = automata_init(4, "retorno"); //OK
   Automata* main_automata = automata_init(9, "main"); //OK
   Automata* chamada_automata = automata_init(5, "chamada"); //OK
+  Automata* lista_argumentos_automata = automata_init(2, "lista_argumentos"); //OK
+  Automata* argumento_automata = automata_init(2, "argumento"); //OK
+  Automata* impressao_automata = automata_init(7, "impressao"); //OK
   Automata* inteiro_automata = automata_init(5, "inteiro");
-  Automata* impressao_automata = automata_init(5, "impressao");
   Automata* leitura_automata = automata_init(5, "leitura");
   Automata* while_automata = automata_init(5, "while");
   Automata* ifelse_automata = automata_init(5, "ifelse");
   Automata* if_automata = automata_init(5, "if");
   Automata* caractere_automata = automata_init(5, "caractere");
   Automata* booleana_automata = automata_init(5, "booleana");
-  Automata* numero_automata = automata_init(5, "numero");
-  Automata* lista_argumentos_automata = automata_init(5, "lista_argumentos");
+  Automata* string_automata = automata_init(5, "string");
 
   //PROGRAM AUTOMATA
   automata_set_final_state(program_automata, 1);
@@ -350,6 +369,28 @@ Automata* create_program_automata() {
   automata_add_transition(chamada_automata, 2, 3, lista_argumentos_automata);
   automata_add_transition(chamada_automata, 1, 2, delimiter_open_parenthesis_check_automata);
   automata_add_transition(chamada_automata, 0, 1, nome_automata);
+
+  //LISTA_ARGUMENTOS AUTOMATA
+  automata_set_final_state(lista_argumentos_automata, 1);
+  automata_add_transition(lista_argumentos_automata, 1, 0, delimiter_comma_check_automata);
+  automata_add_transition(lista_argumentos_automata, 0, 1, argumento_automata);
+
+  //ARGUMENTO AUTOMATA
+  automata_set_final_state(argumento_automata, 1);
+  automata_add_transition(argumento_automata, 0, 1, caractere_automata);
+  automata_add_transition(argumento_automata, 0, 1, expressao_automata);
+
+  //IMPRESSAO AUTOMATA
+  automata_set_final_state(impressao_automata, 6);
+  automata_add_transition(impressao_automata, 5, 6, delimiter_close_parenthesis_check_automata);
+  automata_add_transition(impressao_automata, 4, 5, expressao_automata);
+  automata_add_transition(impressao_automata, 3, 5, string_automata);
+  automata_add_transition(impressao_automata, 2, 4, delimiter_open_parenthesis_check_automata);
+  automata_add_transition(impressao_automata, 1, 3, delimiter_open_parenthesis_check_automata);
+  automata_add_transition(impressao_automata, 0, 2, keyword_printeln_check_automata);
+  automata_add_transition(impressao_automata, 0, 2, keyword_printe_check_automata);
+  automata_add_transition(impressao_automata, 0, 1, keyword_printsln_check_automata);
+  automata_add_transition(impressao_automata, 0, 1, keyword_prints_check_automata);
 
   return program_automata;
 }
