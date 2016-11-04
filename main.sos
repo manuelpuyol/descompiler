@@ -6,7 +6,7 @@ functions {
   int sum(int a, int b);
 }
 data {
-  inteiro globalVar;
+  int globalVar;
 }
 
 int sum(int a, int b) {
