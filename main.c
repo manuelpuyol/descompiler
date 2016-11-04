@@ -47,8 +47,8 @@ AUTOMATA_KEYWORK(functions);
 
 AUTOMATA_DELIMITER(open_braces, "{");
 AUTOMATA_DELIMITER(close_braces, "}");
-AUTOMATA_DELIMITER(open_parenthesis, ")");
-AUTOMATA_DELIMITER(close_parenthesis, "(");
+AUTOMATA_DELIMITER(open_parenthesis, "(");
+AUTOMATA_DELIMITER(close_parenthesis, ")");
 AUTOMATA_DELIMITER(semicolon, ";");
 AUTOMATA_DELIMITER(comma, ",");
 
@@ -82,7 +82,7 @@ Automata* create_program_automata() {
   Automata* tipo_nome_automata = automata_init(2, "tipo_nome"); //OK
   Automata* dados_automata = automata_init(5, "dados"); //OK
   Automata* assinaturas_automata = automata_init(5, "assinaturas"); //OK
-  Automata* assinatura_automata = automata_init(5, "assinatura");
+  Automata* assinatura_automata = automata_init(7, "assinatura"); //OK
   Automata* declaracao_automata = automata_init(2, "declaracao");
   Automata* main_automata = automata_init(5, "main");
   Automata* comandos_funcao_automata = automata_init(5, "comandos_funcao");
@@ -174,13 +174,23 @@ Automata* create_program_automata() {
   automata_add_transition(dados_automata, 1, 2, delimiter_open_braces_check_automata);
   automata_add_transition(dados_automata, 0, 1, keyword_data_check_automata);
 
-  //DADOS AUTOMATA
+  //ASSINATURAS AUTOMATA
   automata_set_final_state(assinaturas_automata, 4);
   automata_add_transition(assinaturas_automata, 3, 4, delimiter_close_braces_check_automata);
   automata_add_transition(assinaturas_automata, 3, 3, assinatura_automata);
   automata_add_transition(assinaturas_automata, 2, 3, assinatura_automata);
   automata_add_transition(assinaturas_automata, 1, 2, delimiter_open_braces_check_automata);
   automata_add_transition(assinaturas_automata, 0, 1, keyword_functions_check_automata);
+
+  //ASSINATURAS AUTOMATA
+  automata_set_final_state(assinatura_automata, 6);
+  automata_add_transition(assinatura_automata, 5, 6, delimiter_semicolon_check_automata);
+  automata_add_transition(assinatura_automata, 4, 5, delimiter_close_parenthesis_check_automata);
+  automata_add_transition(assinatura_automata, 4, 3, delimiter_comma_check_automata);
+  automata_add_transition(assinatura_automata, 3, 4, parametro_automata);
+  automata_add_transition(assinatura_automata, 2, 3, delimiter_open_parenthesis_check_automata);
+  automata_add_transition(assinatura_automata, 1, 2, nome_automata);
+  automata_add_transition(assinatura_automata, 0, 1, tipo_nome_automata);
 
   return program_automata;
 }
