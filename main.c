@@ -89,9 +89,12 @@ Automata* create_program_automata() {
   Automata* assinatura_automata = automata_init(7, "assinatura"); //OK
   Automata* parametro_automata = automata_init(3, "parametro"); //OK
   Automata* declaracao_automata = automata_init(7, "declaracao"); //OK
+  Automata* comandos_funcao_automata = automata_init(3, "comandos_funcao"); //OK
+  Automata* lista_comandos_automata = automata_init(2, "lista_comandos"); //OK
   Automata* main_automata = automata_init(5, "main");
-  Automata* comandos_funcao_automata = automata_init(5, "comandos_funcao");
   Automata* inteiro_automata = automata_init(5, "inteiro");
+  Automata* retorno_automata = automata_init(5, "retorno");
+  Automata* comando_automata = automata_init(5, "comando");
 
   //PROGRAM AUTOMATA
   automata_set_final_state(program_automata, 1);
@@ -211,6 +214,16 @@ Automata* create_program_automata() {
   automata_add_transition(declaracao_automata, 2, 3, delimiter_open_brackets_check_automata);
   automata_add_transition(declaracao_automata, 1, 2, nome_automata);
   automata_add_transition(declaracao_automata, 0, 1, tipo_nome_automata);
+
+  //COMANDOS_FUNCAO AUTOMATA
+  automata_set_final_state(comandos_funcao_automata, 2);
+  automata_add_transition(comandos_funcao_automata, 1, 2, retorno_automata);
+  automata_add_transition(comandos_funcao_automata, 0, 1, lista_comandos_automata);
+
+  //LISTA_COMANDOS AUTOMATA
+  automata_set_final_state(lista_comandos_automata, 1);
+  automata_add_transition(lista_comandos_automata, 1, 1, comando_automata);
+  automata_add_transition(lista_comandos_automata, 0, 1, comando_automata);
 
   return program_automata;
 }
