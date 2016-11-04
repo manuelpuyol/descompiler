@@ -91,10 +91,16 @@ Automata* create_program_automata() {
   Automata* declaracao_automata = automata_init(7, "declaracao"); //OK
   Automata* comandos_funcao_automata = automata_init(3, "comandos_funcao"); //OK
   Automata* lista_comandos_automata = automata_init(2, "lista_comandos"); //OK
+  Automata* comando_automata = automata_init(2, "comando"); //OK
+  Automata* atribuicao_automata = automata_init(5, "atribuicao"); //OK
   Automata* main_automata = automata_init(5, "main");
   Automata* inteiro_automata = automata_init(5, "inteiro");
   Automata* retorno_automata = automata_init(5, "retorno");
-  Automata* comando_automata = automata_init(5, "comando");
+  Automata* impressao_automata = automata_init(5, "impressao");
+  Automata* leitura_automata = automata_init(5, "leitura");
+  Automata* while_automata = automata_init(5, "while");
+  Automata* ifelse_automata = automata_init(5, "ifelse");
+  Automata* if_automata = automata_init(5, "if");
 
   //PROGRAM AUTOMATA
   automata_set_final_state(program_automata, 1);
@@ -224,6 +230,15 @@ Automata* create_program_automata() {
   automata_set_final_state(lista_comandos_automata, 1);
   automata_add_transition(lista_comandos_automata, 1, 1, comando_automata);
   automata_add_transition(lista_comandos_automata, 0, 1, comando_automata);
+
+  //COMANDO AUTOMATA
+  automata_set_final_state(comando_automata, 1);
+  automata_add_transition(comando_automata, 0, 1, impressao_automata);
+  automata_add_transition(comando_automata, 0, 1, leitura_automata);
+  automata_add_transition(comando_automata, 0, 1, while_automata);
+  automata_add_transition(comando_automata, 0, 1, ifelse_automata);
+  automata_add_transition(comando_automata, 0, 1, if_automata);
+  automata_add_transition(comando_automata, 0, 1, atribuicao_automata);
 
   return program_automata;
 }
