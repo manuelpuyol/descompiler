@@ -43,6 +43,7 @@ AUTOMATA_KEYWORK(int);
 AUTOMATA_KEYWORK(as);
 AUTOMATA_KEYWORK(struct);
 AUTOMATA_KEYWORK(data);
+AUTOMATA_KEYWORK(functions);
 
 AUTOMATA_DELIMITER(open_braces, "{");
 AUTOMATA_DELIMITER(close_braces, "}");
@@ -60,6 +61,7 @@ Automata* create_program_automata() {
   AUTOMATA_TRANSITION_INIT(keyword_int_check);
   AUTOMATA_TRANSITION_INIT(keyword_struct_check);
   AUTOMATA_TRANSITION_INIT(keyword_data_check);
+  AUTOMATA_TRANSITION_INIT(keyword_functions_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_close_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_parenthesis_check);
@@ -79,8 +81,9 @@ Automata* create_program_automata() {
   Automata* implementacao_automata = automata_init(10, "implementacao"); //OK
   Automata* tipo_nome_automata = automata_init(2, "tipo_nome"); //OK
   Automata* dados_automata = automata_init(5, "dados"); //OK
+  Automata* assinaturas_automata = automata_init(5, "assinaturas"); //OK
+  Automata* assinatura_automata = automata_init(5, "assinatura");
   Automata* declaracao_automata = automata_init(2, "declaracao");
-  Automata* assinaturas_automata = automata_init(5, "assinaturas");
   Automata* main_automata = automata_init(5, "main");
   Automata* comandos_funcao_automata = automata_init(5, "comandos_funcao");
   Automata* parametro_automata = automata_init(5, "parametro");
@@ -170,6 +173,14 @@ Automata* create_program_automata() {
   automata_add_transition(dados_automata, 2, 3, declaracao_automata);
   automata_add_transition(dados_automata, 1, 2, delimiter_open_braces_check_automata);
   automata_add_transition(dados_automata, 0, 1, keyword_data_check_automata);
+
+  //DADOS AUTOMATA
+  automata_set_final_state(assinaturas_automata, 4);
+  automata_add_transition(assinaturas_automata, 3, 4, delimiter_close_braces_check_automata);
+  automata_add_transition(assinaturas_automata, 3, 3, assinatura_automata);
+  automata_add_transition(assinaturas_automata, 2, 3, assinatura_automata);
+  automata_add_transition(assinaturas_automata, 1, 2, delimiter_open_braces_check_automata);
+  automata_add_transition(assinaturas_automata, 0, 1, keyword_functions_check_automata);
 
   return program_automata;
 }
