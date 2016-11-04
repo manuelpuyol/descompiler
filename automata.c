@@ -95,21 +95,18 @@ Token* automata_apply(Automata* automata, Token* token, int spaces) {
   }
   else {
     printf("%sNão tem checher!\n", string_spaces(spaces));
-    while(!automata->final_states[current_state]) {
+    while(1) {
       AutomataNode *automata_transition = automata->transition_table[current_state];
 
       if(automata_transition == NULL) {
         printf("%sEsse cara não tem nenhum automata!!!\n", string_spaces(spaces));
-        getchar();
-        getchar();
-        getchar();
-        getchar();
+        break;
       }
 
       while(automata_transition != NULL) {
         next_token = automata_apply(automata_transition->automata, current_token, spaces + 1);
         if(next_token != NULL) {
-          printf("%s %s Voltou com um next_token: %s!!!\n", string_spaces(spaces), automata->name, token_value(next_token));
+          printf("%s %s %d Voltou com um next_token: %s!!!\n", string_spaces(spaces), automata->name, current_state, token_value(next_token));
           current_token = next_token;
           current_state = automata_transition->next_state;
           break;
@@ -117,15 +114,18 @@ Token* automata_apply(Automata* automata, Token* token, int spaces) {
         automata_transition = automata_transition->next;
       }
       if(next_token == NULL) {
-        printf("%sSaiu do loop sem next_token!!!\n", string_spaces(spaces));
-        return NULL;
+        printf("%s %s Saiu do loop sem next_token!!!\n", string_spaces(spaces), automata->name);
+        break;
       }
       else {
         printf("%sSaiu do loop com next_token State: %d %d!!!\n", string_spaces(spaces), current_state, automata->final_states[current_state]);
       }
     }
-    printf("%sSaiu do loop principal!!! %s\n", string_spaces(spaces), token_value(current_token));
-    return current_token;
+    printf("%sSaiu do loop principal!!! %s %d\n", string_spaces(spaces), token_value(current_token), automata->final_states[current_state]);
+    if(automata->final_states[current_state]) {
+      return current_token;
+    }
+    return NULL;
   }
 
   return NULL;

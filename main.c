@@ -42,6 +42,7 @@ AUTOMATA_KEYWORK(bool);
 AUTOMATA_KEYWORK(float);
 AUTOMATA_KEYWORK(int);
 AUTOMATA_KEYWORK(as);
+AUTOMATA_KEYWORK(struct);
 
 AUTOMATA_DELIMITER(open_braces, {);
 AUTOMATA_DELIMITER(close_braces, });
@@ -54,6 +55,7 @@ Automata* create_program_automata() {
   AUTOMATA_TRANSITION_INIT(keyword_bool_check);
   AUTOMATA_TRANSITION_INIT(keyword_float_check);
   AUTOMATA_TRANSITION_INIT(keyword_int_check);
+  AUTOMATA_TRANSITION_INIT(keyword_struct_check);
   AUTOMATA_TRANSITION_INIT(delimiter_open_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_close_braces_check);
   AUTOMATA_TRANSITION_INIT(delimiter_semicolon_check);
@@ -61,14 +63,17 @@ Automata* create_program_automata() {
 
   Automata* program_automata = automata_init(5, "program"); //OK
   Automata* tipos_automata = automata_init(5, "tipos"); //OK
-  Automata* assinaturas_automata = automata_init(5, "assinaturas");
-  Automata* dados_automata = automata_init(5, "dados");
-  Automata* funcoes_automata = automata_init(3, "funcoes");
   Automata* tipo_automata = automata_init(2, "tipo"); //OK
   Automata* renomear_automata = automata_init(5, "renomear"); //OK
-  Automata* estrutura_automata = automata_init(2, "estrutura");
+  Automata* estrutura_automata = automata_init(7, "estrutura"); //OK
   Automata* nome_automata = identifier_check_automata; //OK
   Automata* tipo_base_automata = automata_init(2, "tipo_base"); //OK
+  Automata* funcoes_automata = automata_init(3, "funcoes"); //OK
+  Automata* declaracao_automata = automata_init(2, "declaracao");
+  Automata* assinaturas_automata = automata_init(5, "assinaturas");
+  Automata* dados_automata = automata_init(5, "dados");
+  Automata* implementacao_automata = automata_init(5, "implementacao");
+  Automata* main_automata = automata_init(5, "main");
 
   //PROGRAM AUTOMATA
   automata_set_final_state(program_automata, 1);
@@ -113,6 +118,22 @@ Automata* create_program_automata() {
   automata_add_transition(tipo_base_automata, 0, 1, keyword_bool_check_automata);
   automata_add_transition(tipo_base_automata, 0, 1, keyword_float_check_automata);
   automata_add_transition(tipo_base_automata, 0, 1, keyword_int_check_automata);
+
+  //ESTRUTURA AUTOMATA
+  automata_set_final_state(estrutura_automata, 6);
+  automata_add_transition(estrutura_automata, 5, 6, delimiter_semicolon_check_automata);
+  automata_add_transition(estrutura_automata, 4, 5, delimiter_close_braces_check_automata);
+  automata_add_transition(estrutura_automata, 4, 4, declaracao_automata);
+  automata_add_transition(estrutura_automata, 3, 4, declaracao_automata);
+  automata_add_transition(estrutura_automata, 2, 3, delimiter_open_braces_check_automata);
+  automata_add_transition(estrutura_automata, 1, 2, nome_automata);
+  automata_add_transition(estrutura_automata, 0, 1, keyword_struct_check_automata);
+
+  //FUNCOES AUTOMATA
+  automata_set_final_state(funcoes_automata, 2);
+  automata_add_transition(funcoes_automata, 1, 2, main_automata);
+  automata_add_transition(funcoes_automata, 1, 1, implementacao_automata);
+  automata_add_transition(funcoes_automata, 0, 1, implementacao_automata);
 
   return program_automata;
 }
