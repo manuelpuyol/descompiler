@@ -128,7 +128,7 @@ Automata* create_program_automata() {
   Automata* variavel_automata = automata_init(6, "variavel"); //OK
   Automata* retorno_automata = automata_init(4, "retorno"); //OK
   Automata* main_automata = automata_init(9, "main"); //OK
-  Automata* chamada_automata = automata_init(5, "chamada");
+  Automata* chamada_automata = automata_init(5, "chamada"); //OK
   Automata* inteiro_automata = automata_init(5, "inteiro");
   Automata* impressao_automata = automata_init(5, "impressao");
   Automata* leitura_automata = automata_init(5, "leitura");
@@ -138,6 +138,7 @@ Automata* create_program_automata() {
   Automata* caractere_automata = automata_init(5, "caractere");
   Automata* booleana_automata = automata_init(5, "booleana");
   Automata* numero_automata = automata_init(5, "numero");
+  Automata* lista_argumentos_automata = automata_init(5, "lista_argumentos");
 
   //PROGRAM AUTOMATA
   automata_set_final_state(program_automata, 1);
@@ -309,8 +310,8 @@ Automata* create_program_automata() {
   automata_add_transition(fator_arit_automata, 3, 4, aritmetica_automata);
   automata_add_transition(fator_arit_automata, 2, 3, delimiter_open_parenthesis_check_automata);
   automata_add_transition(fator_arit_automata, 2, 1, numero_automata);
-  automata_add_transition(fator_arit_automata, 0, 1, chamada_automata);
   automata_add_transition(fator_arit_automata, 0, 1, variavel_automata);
+  automata_add_transition(fator_arit_automata, 0, 1, chamada_automata);
   automata_add_transition(fator_arit_automata, 0, 3, delimiter_open_parenthesis_check_automata);
   automata_add_transition(fator_arit_automata, 0, 2, operator_minus_check_automata);
   automata_add_transition(fator_arit_automata, 0, 1, numero_automata);
@@ -341,6 +342,14 @@ Automata* create_program_automata() {
   automata_add_transition(main_automata, 2, 3, delimiter_open_parenthesis_check_automata);
   automata_add_transition(main_automata, 1, 2, keyword_main_check_automata);
   automata_add_transition(main_automata, 0, 1, keyword_int_check_automata);
+
+  //CHAMADA AUTOMATA
+  automata_set_final_state(chamada_automata, 4);
+  automata_add_transition(chamada_automata, 3, 4, delimiter_close_parenthesis_check_automata);
+  automata_add_transition(chamada_automata, 2, 4, delimiter_close_parenthesis_check_automata);
+  automata_add_transition(chamada_automata, 2, 3, lista_argumentos_automata);
+  automata_add_transition(chamada_automata, 1, 2, delimiter_open_parenthesis_check_automata);
+  automata_add_transition(chamada_automata, 0, 1, nome_automata);
 
   return program_automata;
 }
