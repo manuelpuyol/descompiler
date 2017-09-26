@@ -1,4 +1,4 @@
-descompiler
+compiler
 
 # Object files
 *.o
@@ -33,3 +33,6 @@ descompiler
 # Debug files
 *.dSYM/
 *.su
+
+#Directories
+obj/*

@@ -416,7 +416,7 @@ void eval(char *source_code) {
 
 int main(int argc, char const *argv[]) {
   const char *filename = argv[1];
-  char *source_code = read_file(filename);
+  char *source_code = ReadFile(filename);
 
   if(source_code == NULL) {
     printf("Não foi possível abrir o arquivo %s!\n", filename);

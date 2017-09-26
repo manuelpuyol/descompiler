@@ -1,9 +1,11 @@
 types {
   int as inteiro;
 }
+
 functions {
   int sum(int a, int b);
 }
+
 data {
   int globalVar;
 }
