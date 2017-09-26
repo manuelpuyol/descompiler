@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include "token.h"
 
-#define token_size(token) (token->end - token->ini + 1)
+#define GetTokenSize(token) (token->end - token->ini + 1)
 
-Token* token_init(enum TokenType type, int ini, int end, char* source_code) {
-  Token* token = malloc(sizeof (Token));
+Token *InitToken(enum TokenType type, int ini, int end, char *source_code) {
+  Token *token = malloc(sizeof (Token));
 
   token->type = type;
   token->ini = ini;
@@ -15,42 +15,42 @@ Token* token_init(enum TokenType type, int ini, int end, char* source_code) {
   return token;
 }
 
-char* token_value(Token* token) {
-  char* value = (char*) malloc(sizeof(char) * (token_size(token) + 1));
+char *GetTokenValue(Token *token) {
+  char *value = (char*) malloc(sizeof(char) * (GetTokenSize(token) + 1));
 
-  strncpy(value, &token->source_code[token->ini], token_size(token));
+  strncpy(value, &token->source_code[token->ini], GetTokenSize(token));
 
   return value;
 }
 
-void token_print(Token* token) {
+void PrintToken(Token *token) {
   if(token->type == Identifier) {
-    printf("Identifier: %s %d %d\n", token_value(token), token->ini, token->end);
+    printf("Identifier: %s %d %d\n", GetTokenValue(token), token->ini, token->end);
   }
   else if(token->type == Keyword) {
-    printf("Keyword: %s %d %d\n", token_value(token), token->ini, token->end);
+    printf("Keyword: %s %d %d\n", GetTokenValue(token), token->ini, token->end);
   }
   else if(token->type == Operator) {
-    printf("Operator: %s %d %d\n", token_value(token), token->ini, token->end);
+    printf("Operator: %s %d %d\n", GetTokenValue(token), token->ini, token->end);
   }
   else if(token->type == String) {
-    printf("String: %s %d %d\n", token_value(token), token->ini, token->end);
+    printf("String: %s %d %d\n", GetTokenValue(token), token->ini, token->end);
   }
   else if(token->type == Delimiter) {
-    printf("Delimiter: %s %d %d\n", token_value(token), token->ini, token->end);
+    printf("Delimiter: %s %d %d\n", GetTokenValue(token), token->ini, token->end);
   }
   else if(token->type == Eof) {
-    printf("EOF: %s %d %d\n", token_value(token), token->ini, token->end);
+    printf("EOF: %s %d %d\n", GetTokenValue(token), token->ini, token->end);
   }
   else if(token->type == Number) {
-    printf("Number: %s %d %d\n", token_value(token), token->ini, token->end);
+    printf("Number: %s %d %d\n", GetTokenValue(token), token->ini, token->end);
   }
   else {
     printf("Error!\n");
   }
 }
 
-int token_change_if_keyword(Token* token) {
+int SetTokenKeyword(Token *token) {
   char keywords[][256] = {
     "var", "if", "else", "throw", "true", "false", "unless", "function", "while",
     "for", //10
@@ -58,7 +58,7 @@ int token_change_if_keyword(Token* token) {
     "return", "main", "printe", "printeln", "prints", "printsln"
   };
   int keywords_length = 25;
-  char* value = token_value(token);
+  char *value = GetTokenValue(token);
 
   for (size_t i = 0; i < keywords_length; i++) {
     if(strcmp(keywords[i], value) == 0) {

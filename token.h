@@ -10,13 +10,13 @@ typedef struct Token {
   int ini;
   int end;
   char* source_code;
-  struct Token* next;
-  struct Token* prev;
+  struct Token *next;
+  struct Token *prev;
 } Token;
 
-Token* token_init(enum TokenType type, int ini, int end, char* source_code);
-void token_print(Token* token);
-int token_change_if_keyword(Token* token);
-char* token_value(Token* token);
+Token *InitToken(enum TokenType, int, int, char *);
+void PrintToken(Token *);
+int SetTokenKeyword(Token *);
+char *GetTokenValue(Token *);
 
 #endif

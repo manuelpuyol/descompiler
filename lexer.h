@@ -8,8 +8,8 @@ typedef struct Lexer {
   int cursor;
 } Lexer;
 
-Lexer lexer_init(char* source_code);
-Token* lexer_get_next_token(Lexer* lexer);
-Token* lexer_get_all_tokens(Lexer* lexer);
+Lexer InitLexer(char *);
+Token *GetNextToken(Lexer *);
+Token *GetAllTokens(Lexer *);
 
 #endif

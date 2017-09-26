@@ -2,189 +2,189 @@
 #include <ctype.h>
 #include "lexer.h"
 
-Lexer lexer_init(char* source_code) {
+Lexer InitLexer(char *source_code) {
   Lexer lexer = { source_code, 0 };
 
   return lexer;
 }
 
-char lexer_next_char(Lexer* lexer) {
+char GetNextChar(Lexer *lexer) {
   return lexer->source_code[lexer->cursor++];
 }
 
-char lexer_prev_char(Lexer* lexer) {
+char GetPreviousChar(Lexer *lexer) {
   return lexer->source_code[--lexer->cursor];
 }
 
-char lexer_peek_char(Lexer* lexer) {
+char GetPeekChar(Lexer *lexer) {
   return lexer->source_code[lexer->cursor];
 }
 
-void lexer_skip_white_spaces(Lexer* lexer) {
-  while(isspace(lexer_next_char(lexer)));
-  lexer_prev_char(lexer);
+void SkipWhiteSpaces(Lexer *lexer) {
+  while(isspace(GetNextChar(lexer)));
+  GetPreviousChar(lexer);
 }
 
-Token* lexer_extract_keyword_or_identifier(Lexer* lexer) {
-  Token* token = NULL;
-  char c = lexer_peek_char(lexer);
+Token *ExtractKeywordOrIdentifier(Lexer *lexer) {
+  Token *token = NULL;
+  char c = GetPeekChar(lexer);
 
   if(!isalpha(c)) {
     return NULL;
   }
 
-  token = token_init(Identifier, lexer->cursor, -1, lexer->source_code);
+  token = InitToken(Identifier, lexer->cursor, -1, lexer->source_code);
 
   do {
-    c = lexer_next_char(lexer);
+    c = GetNextChar(lexer);
   } while(isalpha(c) || isdigit(c));
 
-  lexer_prev_char(lexer);
+  GetPreviousChar(lexer);
   token->end = lexer->cursor - 1;
 
-  token_change_if_keyword(token);
+  SetTokenKeyword(token);
 
   return token;
 }
 
-Token* lexer_extract_number(Lexer* lexer) {
-  Token* token = NULL;
-  char c = lexer_peek_char(lexer);
+Token *ExtractNumber(Lexer *lexer) {
+  Token *token = NULL;
+  char c = GetPeekChar(lexer);
 
   if(!isdigit(c)) {
     return NULL;
   }
 
-  token = token_init(Number, lexer->cursor, -1, lexer->source_code);
+  token = InitToken(Number, lexer->cursor, -1, lexer->source_code);
 
   do {
-    c = lexer_next_char(lexer);
+    c = GetNextChar(lexer);
   } while(isdigit(c));
 
   if(c == '.') {
     do {
-      c = lexer_next_char(lexer);
+      c = GetNextChar(lexer);
     } while(isdigit(c));
   }
 
-  lexer_prev_char(lexer);
+  GetPreviousChar(lexer);
   token->end = lexer->cursor - 1;
 
-  token_change_if_keyword(token);
+  SetTokenKeyword(token);
 
   return token;
 }
 
-Token* lexer_extract_operator(Lexer* lexer) {
-  Token* token = NULL;
+Token *ExtractOperator(Lexer *lexer) {
+  Token *token = NULL;
   int cursor_ini = lexer->cursor;
-  char c = lexer_next_char(lexer);
+  char c = GetNextChar(lexer);
 
   switch (c) {
     case '=':
-      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
-      c = lexer_peek_char(lexer);
+      token = InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = GetPeekChar(lexer);
       switch (c) {
         case '=':
           token->end++;
-          lexer_next_char(lexer);
+          GetNextChar(lexer);
       }
       break;
     case '+':
-      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
-      c = lexer_peek_char(lexer);
+      token = InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = GetPeekChar(lexer);
       switch (c) {
         case '+': case '=':
           token->end++;
-          lexer_next_char(lexer);
+          GetNextChar(lexer);
       }
       break;
     case '-':
-      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
-      c = lexer_peek_char(lexer);
+      token = InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = GetPeekChar(lexer);
       switch (c) {
         case '-': case '=':
           token->end++;
-          lexer_next_char(lexer);
+          GetNextChar(lexer);
       }
       break;
     case '*':
-      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
-      c = lexer_peek_char(lexer);
+      token = InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = GetPeekChar(lexer);
       switch (c) {
         case '*': case '=':
           token->end++;
-          lexer_next_char(lexer);
+          GetNextChar(lexer);
       }
       break;
     case '/':
-      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
-      c = lexer_peek_char(lexer);
+      token = InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = GetPeekChar(lexer);
       switch (c) {
         case '=':
           token->end++;
-          lexer_next_char(lexer);
+          GetNextChar(lexer);
       }
       break;
     case '>': case '<':
-      token = token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
-      c = lexer_peek_char(lexer);
+      token = InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      c = GetPeekChar(lexer);
       switch (c) {
         case '=':
           token->end++;
-          lexer_next_char(lexer);
+          GetNextChar(lexer);
       }
       break;
     case '.':
-      return token_init(Operator, cursor_ini, cursor_ini, lexer->source_code);
+      return InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
     default:
-      lexer_prev_char(lexer);
+      GetPreviousChar(lexer);
   }
 
   return token;
 }
 
-Token* lexer_extract_delimiter(Lexer* lexer) {
-  Token* token = NULL;
+Token *ExtractDelimiter(Lexer *lexer) {
+  Token *token = NULL;
   int cursor_ini = lexer->cursor;
-  char c = lexer_next_char(lexer);
+  char c = GetNextChar(lexer);
 
   switch (c) {
     case ';': case '(': case ')': case '{': case '}': case ',': case '[': case ']':
-      return token_init(Delimiter, cursor_ini, cursor_ini, lexer->source_code);
+      return InitToken(Delimiter, cursor_ini, cursor_ini, lexer->source_code);
     default:
-      lexer_prev_char(lexer);
+      GetPreviousChar(lexer);
   }
 
   return token;
 }
 
-Token* lexer_extract_eof(Lexer* lexer) {
+Token *ExtractEOF(Lexer *lexer) {
   int cursor_ini = lexer->cursor;
-  char c = lexer_next_char(lexer);
+  char c = GetNextChar(lexer);
 
   if(c == '\0') {
-    return token_init(Eof, cursor_ini, cursor_ini, lexer->source_code);
+    return InitToken(Eof, cursor_ini, cursor_ini, lexer->source_code);
   }
 
-  lexer_prev_char(lexer);
+  GetPreviousChar(lexer);
   return NULL;
 }
 
-Token* lexer_extract_string(Lexer* lexer) {
-  Token* token = NULL;
-  char string_start = lexer_peek_char(lexer);
+Token *ExtractString(Lexer *lexer) {
+  Token *token = NULL;
+  char string_start = GetPeekChar(lexer);
   char c = string_start;
 
   if(c != '"' && c != '\'') {
     return NULL;
   }
 
-  token = token_init(String, lexer->cursor, -1, lexer->source_code);
+  token = InitToken(String, lexer->cursor, -1, lexer->source_code);
 
-  c = lexer_next_char(lexer);
+  c = GetNextChar(lexer);
   do {
-    c = lexer_next_char(lexer);
+    c = GetNextChar(lexer);
   } while(c != string_start);
 
   token->end = lexer->cursor - 1;
@@ -192,40 +192,40 @@ Token* lexer_extract_string(Lexer* lexer) {
   return token;
 }
 
-Token* lexer_get_next_token(Lexer* lexer) {
-  Token* token = NULL;
+Token *GetNextToken(Lexer *lexer) {
+  Token *token = NULL;
 
-  lexer_skip_white_spaces(lexer);
+  SkipWhiteSpaces(lexer);
 
-  if((token = lexer_extract_eof(lexer))) {
+  if((token = ExtractEOF(lexer))) {
     return token;
   }
-  if((token = lexer_extract_keyword_or_identifier(lexer))) {
+  if((token = ExtractKeywordOrIdentifier(lexer))) {
     return token;
   }
-  if((token = lexer_extract_number(lexer))) {
+  if((token = ExtractNumber(lexer))) {
     return token;
   }
-  if((token = lexer_extract_operator(lexer))) {
+  if((token = ExtractOperator(lexer))) {
     return token;
   }
-  if((token = lexer_extract_string(lexer))) {
+  if((token = ExtractString(lexer))) {
     return token;
   }
-  if((token = lexer_extract_delimiter(lexer))) {
+  if((token = ExtractDelimiter(lexer))) {
     return token;
   }
 
   return token;
 }
 
-Token* lexer_get_all_tokens(Lexer* lexer) {
+Token *GetAllTokens(Lexer *lexer) {
   Token *current_token = NULL, *prev_token = NULL, *first_token = NULL;
 
   do {
-    current_token = lexer_get_next_token(lexer);
+    current_token = GetNextToken(lexer);
     if(current_token != NULL) {
-      token_print(current_token);
+      PrintToken(current_token);
 
       if(first_token == NULL) {
         first_token = current_token;

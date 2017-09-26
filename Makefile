@@ -3,7 +3,7 @@ CFLAGS=-c -Wall
 LDFLAGS=
 SOURCES=main.c token.c utils.c lexer.c automata.c
 OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=descompiler
+EXECUTABLE=compiler
 
 all: $(SOURCES) $(EXECUTABLE)
 

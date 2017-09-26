@@ -4,4 +4,4 @@
    ` make `
 
 ## run
-   `./descompiler main.sos`
+   `./compiler main.kc`
