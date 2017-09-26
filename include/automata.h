@@ -4,7 +4,7 @@
 #include <string.h>
 #include "token.h"
 
-typedef struct Automata {
+typedef struct _Automata {
   struct AutomataNode **transition_table;
   int states_length;
   int *final_states;
@@ -12,7 +12,7 @@ typedef struct Automata {
   const char* name;
 } Automata;
 
-typedef struct AutomataNode {
+typedef struct _AutomataNode {
   struct AutomataNode *next;
   struct Automata *automata;
   int next_state;
