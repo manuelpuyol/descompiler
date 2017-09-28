@@ -28,5 +28,7 @@ int main(int argc, char const *argv[]) {
     eval(source_code);
   }
 
+  free(source_code);
+
   return 0;
 }
