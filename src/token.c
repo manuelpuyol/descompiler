@@ -11,20 +11,23 @@ Token *InitToken(enum TokenType type, int ini, int end, char *source_code) {
   token->ini = ini;
   token->end = end;
   token->source_code = source_code;
+  token->value = NULL;
 
   return token;
 }
 
 char *GetTokenValue(Token *token) {
-  // printf("BBB = %d - %d\n", token->ini, GetTokenSize(token));
-  char *value = malloc(GetTokenSize(token) + 1);
+  if(token->value == NULL) {
+    // printf("BBB = %d - %d\n", token->ini, GetTokenSize(token));
+    token->value = malloc(GetTokenSize(token) + 1);
 
-  strncpy(value, &token->source_code[token->ini], GetTokenSize(token));
+    strncpy(token->value, &token->source_code[token->ini], GetTokenSize(token));
 
-  value[GetTokenSize(token)] = '\0';
-  // printf("CCC = %s - %d\n", value, strlen(value));
+    token->value[GetTokenSize(token)] = '\0';
+    // printf("CCC = %s - %d\n", value, strlen(value));
+  }
 
-  return value;
+  return token->value;
 }
 
 void PrintToken(Token *token, int spaces) {
@@ -50,7 +53,7 @@ void PrintToken(Token *token, int spaces) {
   }
 
   // free(aux);
-  free(token_str);
+  // free(token_str);
 }
 
 int SetTokenKeyword(Token *token) {
@@ -64,13 +67,26 @@ int SetTokenKeyword(Token *token) {
   // printf("AAA = %s - %d - %d\n", value, strlen(value), GetTokenSize(token));
   for (size_t i = 0; i < keywords_length; i++) {
     if(strcmp(keywords[i], value) == 0) {
-      free(value);
+      // free(value);
       token->type = Keyword;
 
       return 1;
     }
   }
-  free(value);
+  // free(value);
 
   return 0;
+}
+
+void FreeTokens(Token *token) {
+  Token *tmp;
+
+  while(token != NULL) {
+    tmp = token->next;
+    free(token->value);
+    free(token);
+    token = tmp;
+  }
+
+  free(token);
 }

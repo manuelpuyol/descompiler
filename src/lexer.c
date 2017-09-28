@@ -265,15 +265,3 @@ Token *GetAllTokens(Lexer *lexer) {
 
   return first_token;
 }
-
-void FreeTokens(Token *token) {
-  Token *tmp;
-
-  while(token != NULL) {
-    tmp = token->next;
-    free(token);
-    token = tmp;
-  }
-
-  free(token);
-}

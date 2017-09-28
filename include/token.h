@@ -10,16 +10,16 @@ typedef enum TokenType { Identifier, Keyword, Operator, String, Delimiter, Eof, 
 
 typedef struct _Token {
   enum TokenType type;
-  int ini;
-  int end;
+  int ini, end;
   char* source_code;
-  struct Token *next;
-  struct Token *prev;
+  struct Token *next, *prev;
+  char *value;
 } Token;
 
 Token *InitToken(enum TokenType, int, int, char *);
 void PrintToken(Token *, int);
 int SetTokenKeyword(Token *);
 char *GetTokenValue(Token *);
+void FreeTokens(Token *);
 
 #endif
