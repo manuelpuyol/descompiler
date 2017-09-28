@@ -16,9 +16,13 @@ Token *InitToken(enum TokenType type, int ini, int end, char *source_code) {
 }
 
 char *GetTokenValue(Token *token) {
-  char *value = (char*)malloc(GetTokenSize(token) + 1);
+  // printf("BBB = %d - %d\n", token->ini, GetTokenSize(token));
+  char *value = malloc(GetTokenSize(token) + 1);
 
   strncpy(value, &token->source_code[token->ini], GetTokenSize(token));
+
+  value[GetTokenSize(token)] = '\0';
+  // printf("CCC = %s - %d\n", value, strlen(value));
 
   return value;
 }
@@ -57,6 +61,7 @@ int SetTokenKeyword(Token *token) {
   int keywords_length = 25;
   char *value = GetTokenValue(token);
 
+  // printf("AAA = %s - %d - %d\n", value, strlen(value), GetTokenSize(token));
   for (size_t i = 0; i < keywords_length; i++) {
     if(strcmp(keywords[i], value) == 0) {
       free(value);
