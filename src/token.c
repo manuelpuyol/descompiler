@@ -1,6 +1,8 @@
 #include "token.h"
 
-#define GetTokenSize(token) (token->end - token->ini + 1)
+int GetTokenSize(Token *token) {
+  return token->end - token->ini + 1;
+}
 
 Token *InitToken(enum TokenType type, int ini, int end, char *source_code) {
   Token *token = (Token *)malloc(sizeof(Token));
@@ -22,30 +24,29 @@ char *GetTokenValue(Token *token) {
 }
 
 void PrintToken(Token *token, int spaces) {
+  char *token_str = GetTokenValue(token);
+  // char *aux = PrintAux(spaces);
+
   if(token->type == Identifier) {
-    printf("%sIdentifier: %s %d %d\n", PrintAux(spaces), GetTokenValue(token), token->ini, token->end);
-  }
-  else if(token->type == Keyword) {
-    printf("%sKeyword: %s %d %d\n", PrintAux(spaces), GetTokenValue(token), token->ini, token->end);
-  }
-  else if(token->type == Operator) {
-    printf("%sOperator: %s %d %d\n", PrintAux(spaces), GetTokenValue(token), token->ini, token->end);
-  }
-  else if(token->type == String) {
-    printf("%sString: %s %d %d\n", PrintAux(spaces), GetTokenValue(token), token->ini, token->end);
-  }
-  else if(token->type == Delimiter) {
-    printf("%sDelimiter: %s %d %d\n", PrintAux(spaces), GetTokenValue(token), token->ini, token->end);
-  }
-  else if(token->type == Eof) {
-    printf("%sEOF: %s %d %d\n", PrintAux(spaces), GetTokenValue(token), token->ini, token->end);
-  }
-  else if(token->type == Number) {
-    printf("%sNumber: %s %d %d\n", PrintAux(spaces), GetTokenValue(token), token->ini, token->end);
-  }
-  else {
+    printf("Identifier: %s\n", token_str);
+  } else if(token->type == Keyword) {
+    printf("Keyword: %s\n", token_str);
+  } else if(token->type == Operator) {
+    printf("Operator: %s\n", token_str);
+  } else if(token->type == String) {
+    printf("String: %s\n", token_str);
+  } else if(token->type == Delimiter) {
+    printf("Delimiter: %s\n", token_str);
+  } else if(token->type == Eof) {
+    printf("EOF: %s\n", token_str);
+  } else if(token->type == Number) {
+    printf("Number: %s\n", token_str);
+  } else {
     printf("Error!\n");
   }
+
+  // free(aux);
+  free(token_str);
 }
 
 int SetTokenKeyword(Token *token) {
@@ -58,10 +59,13 @@ int SetTokenKeyword(Token *token) {
 
   for (size_t i = 0; i < keywords_length; i++) {
     if(strcmp(keywords[i], value) == 0) {
+      free(value);
       token->type = Keyword;
+
       return 1;
     }
   }
+  free(value);
 
   return 0;
 }

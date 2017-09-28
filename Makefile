@@ -8,10 +8,10 @@ ODIR=obj
 
 VPATH=$(SRCDIR)
 
-_DEPS = automata.h lexer.h token.h utils.h
+_DEPS = lexer.h token.h utils.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o automata.o lexer.o token.o utils.o
+_OBJ = main.o lexer.o token.o utils.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)

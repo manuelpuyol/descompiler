@@ -6,5 +6,6 @@
 
 char *ReadFile(const char *);
 char *PrintAux(int);
+void RemoveSpaces(char *);
 
 #endif

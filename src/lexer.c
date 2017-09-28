@@ -206,7 +206,6 @@ Token *GetNextToken(Lexer *lexer) {
 
   SkipWhiteSpaces(lexer);
 
-
   token = ExtractEOF(lexer);
   if(token) {
     return token;
@@ -245,6 +244,7 @@ Token *GetAllTokens(Lexer *lexer) {
 
   do {
     current_token = GetNextToken(lexer);
+    // printf("%d\n", current_token->ini);
 
     if(current_token != NULL) {
       PrintToken(current_token, 0);
@@ -264,4 +264,16 @@ Token *GetAllTokens(Lexer *lexer) {
   } while(current_token->type != Eof);
 
   return first_token;
+}
+
+void FreeTokens(Token *token) {
+  Token *tmp;
+
+  while(token != NULL) {
+    tmp = token->next;
+    free(token);
+    token = tmp;
+  }
+
+  free(token);
 }
