@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <ctype.h>
 #include "lexer.h"
 
 Lexer InitLexer(char *source_code) {
@@ -94,7 +92,8 @@ Token *ExtractOperator(Lexer *lexer) {
       token = InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
       c = GetPeekChar(lexer);
       switch (c) {
-        case '+': case '=':
+        case '+':
+        case '=':
           token->end++;
           GetNextChar(lexer);
       }
@@ -103,7 +102,8 @@ Token *ExtractOperator(Lexer *lexer) {
       token = InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
       c = GetPeekChar(lexer);
       switch (c) {
-        case '-': case '=':
+        case '-':
+        case '=':
           token->end++;
           GetNextChar(lexer);
       }
@@ -112,7 +112,8 @@ Token *ExtractOperator(Lexer *lexer) {
       token = InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
       c = GetPeekChar(lexer);
       switch (c) {
-        case '*': case '=':
+        case '*':
+        case '=':
           token->end++;
           GetNextChar(lexer);
       }
@@ -126,7 +127,8 @@ Token *ExtractOperator(Lexer *lexer) {
           GetNextChar(lexer);
       }
       break;
-    case '>': case '<':
+    case '>':
+    case '<':
       token = InitToken(Operator, cursor_ini, cursor_ini, lexer->source_code);
       c = GetPeekChar(lexer);
       switch (c) {
@@ -150,7 +152,14 @@ Token *ExtractDelimiter(Lexer *lexer) {
   char c = GetNextChar(lexer);
 
   switch (c) {
-    case ';': case '(': case ')': case '{': case '}': case ',': case '[': case ']':
+    case ';':
+    case '(':
+    case ')':
+    case '{':
+    case '}':
+    case ',':
+    case '[':
+    case ']':
       return InitToken(Delimiter, cursor_ini, cursor_ini, lexer->source_code);
     default:
       GetPreviousChar(lexer);
@@ -197,22 +206,34 @@ Token *GetNextToken(Lexer *lexer) {
 
   SkipWhiteSpaces(lexer);
 
-  if((token = ExtractEOF(lexer))) {
+
+  token = ExtractEOF(lexer);
+  if(token) {
     return token;
   }
-  if((token = ExtractKeywordOrIdentifier(lexer))) {
+
+  token = ExtractKeywordOrIdentifier(lexer);
+  if(token) {
     return token;
   }
-  if((token = ExtractNumber(lexer))) {
+
+  token = ExtractNumber(lexer);
+  if(token) {
     return token;
   }
-  if((token = ExtractOperator(lexer))) {
+
+  token = ExtractOperator(lexer);
+  if(token) {
     return token;
   }
-  if((token = ExtractString(lexer))) {
+
+  token = ExtractString(lexer);
+  if(token) {
     return token;
   }
-  if((token = ExtractDelimiter(lexer))) {
+
+  token = ExtractDelimiter(lexer);
+  if(token) {
     return token;
   }
 
@@ -224,8 +245,9 @@ Token *GetAllTokens(Lexer *lexer) {
 
   do {
     current_token = GetNextToken(lexer);
+
     if(current_token != NULL) {
-      PrintToken(current_token);
+      PrintToken(current_token, 0);
 
       if(first_token == NULL) {
         first_token = current_token;
@@ -236,8 +258,7 @@ Token *GetAllTokens(Lexer *lexer) {
         prev_token->next = current_token;
       }
       prev_token = current_token;
-    }
-    else {
+    } else {
       return NULL;
     }
   } while(current_token->type != Eof);

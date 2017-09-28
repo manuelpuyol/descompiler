@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "utils.h"
 
 size_t FileSize(FILE *file) {
@@ -23,4 +21,14 @@ char *ReadFile(const char *filename) {
 
   fclose(source_file);
   return source;
+}
+
+char *PrintAux(int spaces) {
+  char *string = malloc(spaces + 1);
+
+  for (size_t i = 0; i < spaces; i++) {
+    string[i] = '-';
+  }
+
+  return string;
 }

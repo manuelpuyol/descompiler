@@ -2,13 +2,16 @@
 #define _AUTOMATA_H_
 
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "utils.h"
 #include "token.h"
 
 typedef struct _Automata {
   struct AutomataNode **transition_table;
   int states_length;
   int *final_states;
-  int (*checker)(Token*);
+  int (*checker)(Token *);
   const char* name;
 } Automata;
 

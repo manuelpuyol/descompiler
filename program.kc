@@ -25,7 +25,7 @@ int main() {
   }
 
   result = sum(a, b);
-  printeln(result)
+  println(result)
 
   return 0;
 }
