@@ -3,7 +3,6 @@
 #include "token.h"
 
 void eval(char *source_code) {
-  // RemoveSpaces(source_code);
   Lexer lexer = InitLexer(source_code);
   Token *token;
 

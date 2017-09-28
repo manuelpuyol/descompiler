@@ -180,6 +180,27 @@ Token *ExtractEOF(Lexer *lexer) {
   return NULL;
 }
 
+Token *ExtractComment(Lexer *lexer) {
+  Token *token = NULL;
+  char comment_start = GetPeekChar(lexer);
+  char c = comment_start;
+
+  if(c != '`') {
+    return NULL;
+  }
+
+  token = InitToken(Comment, lexer->cursor, -1, lexer->source_code);
+
+  c = GetNextChar(lexer);
+  do {
+    c = GetNextChar(lexer);
+  } while(c != '\n' && c != '\0');
+
+  token->end = lexer->cursor - 2;
+
+  return token;
+}
+
 Token *ExtractString(Lexer *lexer) {
   Token *token = NULL;
   char string_start = GetPeekChar(lexer);
@@ -207,6 +228,11 @@ Token *GetNextToken(Lexer *lexer) {
   SkipWhiteSpaces(lexer);
 
   token = ExtractEOF(lexer);
+  if(token) {
+    return token;
+  }
+
+  token = ExtractComment(lexer);
   if(token) {
     return token;
   }
@@ -244,7 +270,6 @@ Token *GetAllTokens(Lexer *lexer) {
 
   do {
     current_token = GetNextToken(lexer);
-    // printf("%d\n", current_token->ini);
 
     if(current_token != NULL) {
       PrintToken(current_token, 0);

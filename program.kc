@@ -7,7 +7,7 @@ functions {
 }
 
 data {
-  int globalVar;
+  int globalVar; `this is a comment
 }
 
 int sum(int a, int b) {
@@ -29,3 +29,4 @@ int main() {
 
   return 0;
 }
+`this is a comment on EOF

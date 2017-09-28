@@ -6,7 +6,7 @@
 #include <string.h>
 #include "utils.h"
 
-typedef enum TokenType { Identifier, Keyword, Operator, String, Delimiter, Eof, Number } TokenType;
+typedef enum TokenType { Identifier, Keyword, Operator, String, Delimiter, Eof, Number, Comment } TokenType;
 
 typedef struct _Token {
   enum TokenType type;
