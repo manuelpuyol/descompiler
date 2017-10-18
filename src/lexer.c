@@ -35,7 +35,7 @@ Token *ExtractKeywordOrIdentifier(Lexer *lexer) {
 
   do {
     c = GetNextChar(lexer);
-  } while(isalpha(c) || isdigit(c));
+  } while(isalpha(c) || isdigit(c) || c == '_' || c == '-');
 
   GetPreviousChar(lexer);
   token->end = lexer->cursor - 1;

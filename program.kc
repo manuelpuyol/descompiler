@@ -1,13 +1,15 @@
 types {
   int as inteiro;
+  char as letra;
 }
 
 functions {
   int sum(int a, int b);
+  int mul(int a, int b);
 }
 
 data {
-  int globalVar; `this is a comment
+  int global_var; `this is a comment
 }
 
 int sum(int a, int b) {
@@ -16,6 +18,15 @@ int sum(int a, int b) {
   }
 
   c = a + b;
+  return c;
+}
+
+int mul(int a, int b) {
+  data {
+    int c;
+  }
+
+  c = a * b;
   return c;
 }
 

@@ -1,0 +1,69 @@
+PROGRAMA = [ TIPOS ] [ ASSINATURAS ] [ DADOS ] [ FUNCOES ] [ MAIN ].
+
+TIPOS = "types" "{" TIPO { TIPO } "}" .
+TIPO = RENOMEAR | ESTRUTURA .
+RENOMEAR = TIPO_BASE "as" NOME ";" .
+TIPO_BASE = "int" | "float" | "bool" | "char" .
+ESTRUTURA = "struct" NOME "{" DECLARACAO { DECLARACAO } "}" ";" .
+DECLARACAO = TIPO_NOME NOME [ "[" INTEIRO "]" ] ";" .
+TIPO_NOME = TIPO_BASE | NOME .
+
+ASSINATURAS = "functions" "{" ASSINATURA { ASSINATURA } "}" . 
+ASSINATURA = TIPO_NOME NOME "(" PARAMETRO { "," PARAMETRO }  ")" ";" .
+PARAMETRO = TIPO_NOME NOME .
+
+DADOS = "data" "{" DECLARACAO { DECLARACAO } "}" .
+
+FUNCOES = IMPLEMENTACAO { IMPLEMENTACAO }.
+MAIN = "int" "main" "(" ")" "{" DADOS COMANDOS_FUNCAO "}" .
+
+IMPLEMENTACAO = TIPO_NOME NOME "(" PARAMETRO { "," PARAMETRO }  ")" "{" DADOS COMANDOS_FUNCAO "}" .
+
+COMANDOS_FUNCAO = LISTA_COMANDOS RETORNO .
+RETORNO = "return" EXPRESSAO ";" .
+LISTA_COMANDOS = COMANDO { COMANDO } .
+
+COMANDO = ATRIBUICAO | IF | IFELSE | WHILE | IMPRESSAO
+ATRIBUICAO = NOME "=" ( EXPRESSAO | CARACTERE) ";" .
+IF = "if" "(" BOOLEANA ")" "{" LISTA_COMANDOS "}" .
+IFELSE = IF "else" "{" LISTA_COMANDOS "}" .
+WHILE = "while" "(" LISTA_COMANDOS ")" .
+IMPRESSAO = ( ("prints" | "printsln" ) "(" STRING ")" ) | ( ("print" | "println" ) "(" EXPRESSAO ")" ) .
+
+CARACTERE = "'" ASCII "'" | "'" TRATADOS "'" .
+EXPRESSAO = ARITMETICA | BOOLEANA .
+
+BOOLEANA = TERMO_BOOLA { "||" TERMO_BOOLA } .
+TERMO_BOOLA = TERMO_BOOLB { "&&" TERMO_BOOLB } .
+TERMO_BOOLB = ["!"] FATOR_BOOL .
+FATOR_BOOL = "true" | "false" |( "(" BOOLEANA ")" ) | VARIAVEL | CHAMADA | ( "(" ARITMETICA COMPARADOR_ARIT ARITMETICA ")" ) | ( "(" BOOLEANA COMPARADOR_BOOL BOOLEANA ")" ) .
+
+COMPARADOR_ARIT = ">" | ">=" | "<" | "<=" | COMAPADOR_BOOL .
+COMAPADOR_BOOL = "==" | "!=" .
+
+ARITMETICA = TERMO_ARITA { ( "+" | "-" ) TERMO_ARITA } .
+TERMO_ARITA = FATOR_ARIT { ( "*" | "/" | "%" ) FATOR_ARIT } .
+FATOR_ARIT = NUMERO | ( "-" NUMERO ) | ( "(" ARITMETICA ")" ) | ( "-" "(" ARITMETICA ")" ) | VARIAVEL | CHAMADA .
+
+CHAMADA = NOME "(" [ LISTA_ARGUMENTOS ] ")" .
+LISTA_ARGUMENTOS = ARGUMENTO { "," ARGUMENTO } .
+ARGUMENTO = EXPRESSAO | CARACTERE .
+
+VARIAVEL = NOME [ ( "[" INTEIRO "]" ) | ( "." NOME ) ] .
+
+NOME = LETRA [ { LETRA | DIGITO | ESPECIAIS } ] .
+ESPECIAIS = "_" | "?" .
+
+STRING = """ { ASCII | TRATADOS } """ .
+
+INTEIRO = DIGITO { DIGITO } .
+NUMERO = INTEIRO [ "." INTEIRO ] .
+
+LETRA = "a" | "b" | "c" | "d" | "e" | "f"| "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "A" | "B" | "C" | "D" | "E" | "F" | "G"  | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" .
+
+DIGITO = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" .
+
+ASCII = " " | "!" | "#" | "$" | "%" | "&" | "(" | ")" | "*" | "+" | "," | "-" | "." | "/" | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | ":" | ";" | "<" | "=" | ">" | "?" | "@" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "[" | "]" | "^" | "_" | "`" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "{" | "|" | "}" | "~" .
+
+PROBLEMATICOS = """ | "'" | "\" .
+TRATADOS = ( "\" PROBLEMATICOS ) | "\n" | "\r" | "\t" .
