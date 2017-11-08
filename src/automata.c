@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "automata.h"
-#include "token.h"
 
 Automata* InitAutomata(int states_length, const char* name) {
   Automata* automata = malloc(sizeof (Automata));
@@ -49,7 +46,7 @@ void AddAutomataTransition(Automata* automata, int initial_state, int final_stat
   automata->transition_table[initial_state] = new_automata_node;
 }
 
-Token* AppyAutomata(Automata* automata, Token* token) {
+Token *ApplyAutomata(Automata* automata, Token* token) {
   int current_state = 0;
   Token* current_token = token;
   printf("Name: %s\n", automata->name);
@@ -68,7 +65,7 @@ Token* AppyAutomata(Automata* automata, Token* token) {
     AutomataNode* automata_node = automata->transition_table[current_state];
 
     if(automata_node != NULL) {
-      Token* token_result = AppyAutomata(automata_node->automata, current_token);
+      Token* token_result = ApplyAutomata(automata_node->automata, current_token);
 
       if(token_result != NULL) {
         current_token = token_result;

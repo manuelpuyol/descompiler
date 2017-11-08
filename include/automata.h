@@ -1,6 +1,8 @@
 #ifndef _AUTOMATA_H_
 #define _AUTOMATA_H_
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "token.h"
 
@@ -22,6 +24,6 @@ Automata *InitAutomata(int, const char *);
 Automata *InitAutomataTransition(int (*checker)(Token *), const char *);
 void SetAutomataFinalState(Automata *, int );
 void AddAutomataTransition(Automata *, int, int, Automata *);
-Token *AppyAutomata(Automata *, Token *);
+Token *ApplyAutomata(Automata *, Token *);
 
 #endif
