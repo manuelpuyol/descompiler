@@ -410,7 +410,10 @@ void eval(char* source_code) {
     printf("Não foi possivel compilar o arquivo!\n");
     exit(-1);
   } else {
-    printf("SUCESSO NA ANÁLISE\n");
+    if(token->next != NULL)
+      printf("FALHA NA ANÁLISE\n");
+    else
+      printf("SUCESSO NA ANÁLISE\n");
   }
 
   FreeTokens(token);
