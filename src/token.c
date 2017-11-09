@@ -32,23 +32,23 @@ void PrintToken(Token *token, int spaces) {
   char *token_str = GetTokenValue(token);
 
   if(token->type == Identifier) {
-    printf("Identifier: %s\n", token_str);
+    printf("%s ==== Identifier: %s\n", PrintAux(spaces), token_str);
   } else if(token->type == Keyword) {
-    printf("Keyword: %s\n", token_str);
+    printf("%s ==== Keyword: %s\n", PrintAux(spaces), token_str);
   } else if(token->type == Operator) {
-    printf("Operator: %s\n", token_str);
+    printf("%s ==== Operator: %s\n", PrintAux(spaces), token_str);
   } else if(token->type == String) {
-    printf("String: %s\n", token_str);
+    printf("%s ==== String: %s\n", PrintAux(spaces), token_str);
   } else if(token->type == Delimiter) {
-    printf("Delimiter: %s\n", token_str);
+    printf("%s ==== Delimiter: %s\n", PrintAux(spaces), token_str);
   } else if(token->type == Eof) {
-    printf("EOF: %s\n", token_str);
+    printf("%s ==== EOF: %s\n", PrintAux(spaces), token_str);
   } else if(token->type == Number) {
-    printf("Number: %s\n", token_str);
+    printf("%s ==== Number: %s\n", PrintAux(spaces), token_str);
   } else if(token->type == Comment) {
-    printf("Comment: %s\n", token_str);
+    printf("%s ==== Comment: %s\n", PrintAux(spaces), token_str);
   } else {
-    printf("Error!\n");
+    printf("%s Error!\n", PrintAux(spaces));
   }
 }
 

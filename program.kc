@@ -4,21 +4,11 @@ types {
 }
 
 functions {
-  int sum(int a, int b);
   int mul(int a, int b);
 }
 
 data {
-  int global_var; `this is a comment
-}
-
-int sum(int a, int b) {
-  data {
-    int c;
-  }
-
-  c = a + b;
-  return c;
+  int global_var;
 }
 
 int mul(int a, int b) {
@@ -35,9 +25,8 @@ int main() {
     int result;
   }
 
-  result = sum(a, b);
+  result = mul(a, b);
   println(result)
 
   return 0;
 }
-`this is a comment on EOF

@@ -272,7 +272,7 @@ Token *GetAllTokens(Lexer *lexer) {
     current_token = GetNextToken(lexer);
 
     if(current_token != NULL) {
-      PrintToken(current_token, 0);
+      // PrintToken(current_token, 0);
 
       if(first_token == NULL) {
         first_token = current_token;

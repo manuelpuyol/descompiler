@@ -4,44 +4,44 @@
 #include "automata.h"
 
 
-#define AUTOMATA_KEYWORK(name) int keyword_##name ## _check(Token* token) { \
+#define AUTOMATA_KEYWORK(name) int keyword_##name ## _check(Token* token, int spaces) { \
   if(token->type == Keyword && !strcmp(GetTokenValue(token), #name)) { \
-    PrintToken(token, 0); \
+    PrintToken(token, spaces); \
     return 1; \
   } \
 \
   return 0; \
 }
 
-#define AUTOMATA_DELIMITER(name, symb) int delimiter_##name ## _check(Token* token) { \
+#define AUTOMATA_DELIMITER(name, symb) int delimiter_##name ## _check(Token* token, int spaces) { \
   if(token->type == Delimiter && !strcmp(GetTokenValue(token), symb)) { \
-    PrintToken(token, 0); \
+    PrintToken(token, spaces); \
     return 1; \
   } \
 \
   return 0; \
 }
 
-#define AUTOMATA_OPERATOR(name, symb) int operator_##name ## _check(Token* token) { \
+#define AUTOMATA_OPERATOR(name, symb) int operator_##name ## _check(Token* token, int spaces) { \
   if(token->type == Operator && !strcmp(GetTokenValue(token), symb)) { \
-    PrintToken(token, 0); \
+    PrintToken(token, spaces); \
     return 1; \
   } \
 \
   return 0; \
 }
 
-int identifier_check(Token* token) {
+int identifier_check(Token* token, int spaces) {
   if(token->type == Identifier) {
-    PrintToken(token, 0);
+    PrintToken(token, spaces);
     return 1;
   }
   return 0;
 }
 
-int number_check(Token* token) {
+int number_check(Token* token, int spaces) {
   if(token->type == Number) {
-    PrintToken(token, 0);
+    PrintToken(token, spaces);
     return 1;
   }
   return 0;
@@ -403,10 +403,13 @@ void eval(char* source_code) {
     exit(-1);
   }
 
-  token = ApplyAutomata(program, token);
+  token = ApplyAutomata(program, token, 0);
+  PrintSeparator();
   if(token == NULL) {
     printf("Não foi possivel compilar o arquivo!\n");
     exit(-1);
+  } else {
+    printf("COMPILADO COM SUCESSO\n");
   }
 
   FreeTokens(token);

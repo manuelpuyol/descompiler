@@ -43,3 +43,7 @@ void RemoveSpaces(char *source) {
   }
   *i = 0;
 }
+
+void PrintSeparator() {
+  printf("\n ========================================================================== \n\n");
+}

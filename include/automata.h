@@ -10,7 +10,7 @@ typedef struct _Automata {
   struct AutomataNode **transition_table;
   int states_length;
   int *final_states;
-  int (*checker)(Token *);
+  int (*checker)(Token *, int);
   const char *name;
 } Automata;
 
@@ -21,9 +21,9 @@ typedef struct _AutomataNode {
 } AutomataNode;
 
 Automata *InitAutomata(int, const char *);
-Automata *InitAutomataTransition(int (*checker)(Token *), const char *);
+Automata *InitAutomataTransition(int (*checker)(Token *, int), const char *);
 void SetAutomataFinalState(Automata *, int );
 void AddAutomataTransition(Automata *, int, int, Automata *);
-Token *ApplyAutomata(Automata *, Token *);
+Token *ApplyAutomata(Automata *, Token *, int);
 
 #endif
