@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 char *ReadFile(const char *);
-char *PrintAux(int);
+void PrintAux(int);
 void PrintSeparator();
 void RemoveSpaces(char *);
 

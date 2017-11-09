@@ -47,7 +47,7 @@ int number_check(Token* token, int spaces) {
   return 0;
 }
 
-#define AUTOMATA_TRANSITION_INIT(name) Automata *name ## _automata = InitAutomataTransition(&name, #name)
+#define AUTOMATA_TRANSITION_INIT(list, name) Automata *name ## _automata = InitAutomataTransition(list, &name, #name)
 
 AUTOMATA_KEYWORK(types);
 AUTOMATA_KEYWORK(char);
@@ -82,79 +82,79 @@ AUTOMATA_OPERATOR(div, "/");
 AUTOMATA_OPERATOR(mult, "*");
 AUTOMATA_OPERATOR(dot, ".");
 
-Automata *CreateProgramAutomata() {
-  AUTOMATA_TRANSITION_INIT(keyword_types_check);
-  AUTOMATA_TRANSITION_INIT(keyword_as_check);
-  AUTOMATA_TRANSITION_INIT(keyword_char_check);
-  AUTOMATA_TRANSITION_INIT(keyword_bool_check);
-  AUTOMATA_TRANSITION_INIT(keyword_float_check);
-  AUTOMATA_TRANSITION_INIT(keyword_int_check);
-  AUTOMATA_TRANSITION_INIT(keyword_struct_check);
-  AUTOMATA_TRANSITION_INIT(keyword_data_check);
-  AUTOMATA_TRANSITION_INIT(keyword_functions_check);
-  AUTOMATA_TRANSITION_INIT(keyword_return_check);
-  AUTOMATA_TRANSITION_INIT(keyword_main_check);
-  AUTOMATA_TRANSITION_INIT(keyword_print_check);
-  AUTOMATA_TRANSITION_INIT(keyword_println_check);
-  AUTOMATA_TRANSITION_INIT(keyword_prints_check);
-  AUTOMATA_TRANSITION_INIT(keyword_printsln_check);
-  AUTOMATA_TRANSITION_INIT(delimiter_open_braces_check);
-  AUTOMATA_TRANSITION_INIT(delimiter_close_braces_check);
-  AUTOMATA_TRANSITION_INIT(delimiter_open_parenthesis_check);
-  AUTOMATA_TRANSITION_INIT(delimiter_close_parenthesis_check);
-  AUTOMATA_TRANSITION_INIT(delimiter_open_brackets_check);
-  AUTOMATA_TRANSITION_INIT(delimiter_close_brackets_check);
-  AUTOMATA_TRANSITION_INIT(delimiter_semicolon_check);
-  AUTOMATA_TRANSITION_INIT(delimiter_comma_check);
-  AUTOMATA_TRANSITION_INIT(operator_equal_check);
-  AUTOMATA_TRANSITION_INIT(operator_minus_check);
-  AUTOMATA_TRANSITION_INIT(operator_plus_check);
-  AUTOMATA_TRANSITION_INIT(operator_mod_check);
-  AUTOMATA_TRANSITION_INIT(operator_div_check);
-  AUTOMATA_TRANSITION_INIT(operator_mult_check);
-  AUTOMATA_TRANSITION_INIT(operator_dot_check);
-  AUTOMATA_TRANSITION_INIT(identifier_check);
-  AUTOMATA_TRANSITION_INIT(number_check);
+Automata *CreateProgramAutomata(AutomataList *list) {
+  AUTOMATA_TRANSITION_INIT(list, keyword_types_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_as_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_char_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_bool_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_float_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_int_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_struct_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_data_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_functions_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_return_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_main_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_print_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_println_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_prints_check);
+  AUTOMATA_TRANSITION_INIT(list, keyword_printsln_check);
+  AUTOMATA_TRANSITION_INIT(list, delimiter_open_braces_check);
+  AUTOMATA_TRANSITION_INIT(list, delimiter_close_braces_check);
+  AUTOMATA_TRANSITION_INIT(list, delimiter_open_parenthesis_check);
+  AUTOMATA_TRANSITION_INIT(list, delimiter_close_parenthesis_check);
+  AUTOMATA_TRANSITION_INIT(list, delimiter_open_brackets_check);
+  AUTOMATA_TRANSITION_INIT(list, delimiter_close_brackets_check);
+  AUTOMATA_TRANSITION_INIT(list, delimiter_semicolon_check);
+  AUTOMATA_TRANSITION_INIT(list, delimiter_comma_check);
+  AUTOMATA_TRANSITION_INIT(list, operator_equal_check);
+  AUTOMATA_TRANSITION_INIT(list, operator_minus_check);
+  AUTOMATA_TRANSITION_INIT(list, operator_plus_check);
+  AUTOMATA_TRANSITION_INIT(list, operator_mod_check);
+  AUTOMATA_TRANSITION_INIT(list, operator_div_check);
+  AUTOMATA_TRANSITION_INIT(list, operator_mult_check);
+  AUTOMATA_TRANSITION_INIT(list, operator_dot_check);
+  AUTOMATA_TRANSITION_INIT(list, identifier_check);
+  AUTOMATA_TRANSITION_INIT(list, number_check);
 
-  Automata *program_automata = InitAutomata(5, "program"); //OK
-  Automata *tipos_automata = InitAutomata(5, "tipos"); //OK
-  Automata *tipo_automata = InitAutomata(2, "tipo"); //OK
-  Automata *renomear_automata = InitAutomata(5, "renomear"); //OK
-  Automata *estrutura_automata = InitAutomata(7, "estrutura"); //OK
+  Automata *program_automata = InitAutomata(list, 5, "program"); //OK
+  Automata *tipos_automata = InitAutomata(list, 5, "tipos"); //OK
+  Automata *tipo_automata = InitAutomata(list, 2, "tipo"); //OK
+  Automata *renomear_automata = InitAutomata(list, 5, "renomear"); //OK
+  Automata *estrutura_automata = InitAutomata(list, 7, "estrutura"); //OK
   Automata *nome_automata = identifier_check_automata; //OK
   Automata *numero_automata = number_check_automata; //OK
-  Automata *tipo_base_automata = InitAutomata(2, "tipo_base"); //OK
-  Automata *funcoes_automata = InitAutomata(3, "funcoes"); //OK
-  Automata *implementacao_automata = InitAutomata(10, "implementacao"); //OK
-  Automata *tipo_nome_automata = InitAutomata(2, "tipo_nome"); //OK
-  Automata *dados_automata = InitAutomata(5, "dados"); //OK
-  Automata *assinaturas_automata = InitAutomata(5, "assinaturas"); //OK
-  Automata *assinatura_automata = InitAutomata(7, "assinatura"); //OK
-  Automata *parametro_automata = InitAutomata(3, "parametro"); //OK
-  Automata *declaracao_automata = InitAutomata(7, "declaracao"); //OK
-  Automata *comandos_funcao_automata = InitAutomata(3, "comandos_funcao"); //OK
-  Automata *lista_comandos_automata = InitAutomata(2, "lista_comandos"); //OK
-  Automata *comando_automata = InitAutomata(2, "comando"); //OK
-  Automata *atribuicao_automata = InitAutomata(5, "atribuicao"); //OK
-  Automata *expressao_automata = InitAutomata(2, "expressao"); //OK
-  Automata *aritmetica_automata = InitAutomata(2, "aritmetica"); //OK
-  Automata *termo_arita_automata = InitAutomata(2, "termo_arita"); //OK
-  Automata *fator_arit_automata = InitAutomata(5, "fator_arit"); //OK
-  Automata *variavel_automata = InitAutomata(6, "variavel"); //OK
-  Automata *retorno_automata = InitAutomata(4, "retorno"); //OK
-  Automata *main_automata = InitAutomata(9, "main"); //OK
-  Automata *chamada_automata = InitAutomata(5, "chamada"); //OK
-  Automata *lista_argumentos_automata = InitAutomata(2, "lista_argumentos"); //OK
-  Automata *argumento_automata = InitAutomata(2, "argumento"); //OK
-  Automata *impressao_automata = InitAutomata(7, "impressao"); //OK
-  Automata *inteiro_automata = InitAutomata(5, "inteiro");
-  Automata *leitura_automata = InitAutomata(5, "leitura");
-  Automata *while_automata = InitAutomata(5, "while");
-  Automata *ifelse_automata = InitAutomata(5, "ifelse");
-  Automata *if_automata = InitAutomata(5, "if");
-  Automata *caractere_automata = InitAutomata(5, "caractere");
-  Automata *booleana_automata = InitAutomata(5, "booleana");
-  Automata *string_automata = InitAutomata(5, "string");
+  Automata *tipo_base_automata = InitAutomata(list, 2, "tipo_base"); //OK
+  Automata *funcoes_automata = InitAutomata(list, 3, "funcoes"); //OK
+  Automata *implementacao_automata = InitAutomata(list, 10, "implementacao"); //OK
+  Automata *tipo_nome_automata = InitAutomata(list, 2, "tipo_nome"); //OK
+  Automata *dados_automata = InitAutomata(list, 5, "dados"); //OK
+  Automata *assinaturas_automata = InitAutomata(list, 5, "assinaturas"); //OK
+  Automata *assinatura_automata = InitAutomata(list, 7, "assinatura"); //OK
+  Automata *parametro_automata = InitAutomata(list, 3, "parametro"); //OK
+  Automata *declaracao_automata = InitAutomata(list, 7, "declaracao"); //OK
+  Automata *comandos_funcao_automata = InitAutomata(list, 3, "comandos_funcao"); //OK
+  Automata *lista_comandos_automata = InitAutomata(list, 2, "lista_comandos"); //OK
+  Automata *comando_automata = InitAutomata(list, 2, "comando"); //OK
+  Automata *atribuicao_automata = InitAutomata(list, 5, "atribuicao"); //OK
+  Automata *expressao_automata = InitAutomata(list, 2, "expressao"); //OK
+  Automata *aritmetica_automata = InitAutomata(list, 2, "aritmetica"); //OK
+  Automata *termo_arita_automata = InitAutomata(list, 2, "termo_arita"); //OK
+  Automata *fator_arit_automata = InitAutomata(list, 5, "fator_arit"); //OK
+  Automata *variavel_automata = InitAutomata(list, 6, "variavel"); //OK
+  Automata *retorno_automata = InitAutomata(list, 4, "retorno"); //OK
+  Automata *main_automata = InitAutomata(list, 9, "main"); //OK
+  Automata *chamada_automata = InitAutomata(list, 5, "chamada"); //OK
+  Automata *lista_argumentos_automata = InitAutomata(list, 2, "lista_argumentos"); //OK
+  Automata *argumento_automata = InitAutomata(list, 2, "argumento"); //OK
+  Automata *impressao_automata = InitAutomata(list, 7, "impressao"); //OK
+  Automata *inteiro_automata = InitAutomata(list, 5, "inteiro");
+  Automata *leitura_automata = InitAutomata(list, 5, "leitura");
+  Automata *while_automata = InitAutomata(list, 5, "while");
+  Automata *ifelse_automata = InitAutomata(list, 5, "ifelse");
+  Automata *if_automata = InitAutomata(list, 5, "if");
+  Automata *caractere_automata = InitAutomata(list, 5, "caractere");
+  Automata *booleana_automata = InitAutomata(list, 5, "booleana");
+  Automata *string_automata = InitAutomata(list, 5, "string");
 
   //PROGRAM AUTOMATA
   SetAutomataFinalState(program_automata, 1);
@@ -394,8 +394,9 @@ Automata *CreateProgramAutomata() {
 void eval(char* source_code) {
   Lexer lexer = InitLexer(source_code);
   Token *token;
+  AutomataList *list = InitAutomataList();
 
-  Automata *program = CreateProgramAutomata();
+  Automata *program = CreateProgramAutomata(list);
   token = GetAllTokens(&lexer);
 
   if(token == NULL) {
@@ -413,6 +414,7 @@ void eval(char* source_code) {
   }
 
   FreeTokens(token);
+  FreeAutomatas(list);
 }
 
 int main(int argc, char const *argv[]) {

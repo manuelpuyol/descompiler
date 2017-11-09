@@ -6,24 +6,31 @@
 #include <string.h>
 #include "token.h"
 
-typedef struct _Automata {
-  struct AutomataNode **transition_table;
-  int states_length;
-  int *final_states;
-  int (*checker)(Token *, int);
-  const char *name;
-} Automata;
-
 typedef struct _AutomataNode {
   struct AutomataNode *next;
   struct Automata *automata;
   int next_state;
 } AutomataNode;
 
-Automata *InitAutomata(int, const char *);
-Automata *InitAutomataTransition(int (*checker)(Token *, int), const char *);
+typedef struct _Automata {
+  AutomataNode **transition_table;
+  int states_length;
+  int *final_states;
+  int (*checker)(Token *, int);
+  const char *name;
+  struct Automata *next, *prev;
+} Automata;
+
+typedef struct _AutomataList {
+  Automata *head, *end;
+} AutomataList;
+
+AutomataList *InitAutomataList();
+Automata *InitAutomata(AutomataList *, int, const char *);
+Automata *InitAutomataTransition(AutomataList *,int (*checker)(Token *, int), const char *);
 void SetAutomataFinalState(Automata *, int );
 void AddAutomataTransition(Automata *, int, int, Automata *);
 Token *ApplyAutomata(Automata *, Token *, int);
+void FreeAutomatas(AutomataList *);
 
 #endif

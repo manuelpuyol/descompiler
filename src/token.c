@@ -12,6 +12,8 @@ Token *InitToken(enum TokenType type, int ini, int end, char *source_code) {
   token->end = end;
   token->source_code = source_code;
   token->value = NULL;
+  token->next = NULL;
+  token->prev = NULL;
 
   return token;
 }
@@ -31,24 +33,25 @@ char *GetTokenValue(Token *token) {
 void PrintToken(Token *token, int spaces) {
   char *token_str = GetTokenValue(token);
 
+  PrintAux(spaces);
   if(token->type == Identifier) {
-    printf("%s ==== Identifier: %s\n", PrintAux(spaces), token_str);
+    printf("== Identifier: %s\n", token_str);
   } else if(token->type == Keyword) {
-    printf("%s ==== Keyword: %s\n", PrintAux(spaces), token_str);
+    printf("== Keyword: %s\n", token_str);
   } else if(token->type == Operator) {
-    printf("%s ==== Operator: %s\n", PrintAux(spaces), token_str);
+    printf("== Operator: %s\n", token_str);
   } else if(token->type == String) {
-    printf("%s ==== String: %s\n", PrintAux(spaces), token_str);
+    printf("== String: %s\n", token_str);
   } else if(token->type == Delimiter) {
-    printf("%s ==== Delimiter: %s\n", PrintAux(spaces), token_str);
+    printf("== Delimiter: %s\n", token_str);
   } else if(token->type == Eof) {
-    printf("%s ==== EOF: %s\n", PrintAux(spaces), token_str);
+    printf("== EOF: %s\n", token_str);
   } else if(token->type == Number) {
-    printf("%s ==== Number: %s\n", PrintAux(spaces), token_str);
+    printf("== Number: %s\n", token_str);
   } else if(token->type == Comment) {
-    printf("%s ==== Comment: %s\n", PrintAux(spaces), token_str);
+    printf("== Comment: %s\n", token_str);
   } else {
-    printf("%s Error!\n", PrintAux(spaces));
+    printf("Error!\n");
   }
 }
 
@@ -73,6 +76,10 @@ int SetTokenKeyword(Token *token) {
 
 void FreeTokens(Token *token) {
   Token *tmp;
+
+  while(token->prev != NULL) {
+    token = token->prev;
+  }
 
   while(token != NULL) {
     tmp = token->next;

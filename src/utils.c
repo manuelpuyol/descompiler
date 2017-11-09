@@ -23,12 +23,16 @@ char *ReadFile(const char *filename) {
   return source;
 }
 
-char *PrintAux(int spaces) {
+void PrintAux(int spaces) {
   char *string = malloc(spaces + 1);
 
   for (size_t i = 0; i < spaces; i++) {
     string[i] = '-';
   }
+
+  printf("%s ", string);
+
+  free(string);
 
   return string;
 }
